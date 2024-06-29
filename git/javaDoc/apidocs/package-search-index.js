@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"ch.joth.games.pocketsimon.game"},{"l":"ch.joth.games.pocketsimon.game.code"},{"l":"ch.joth.games.pocketsimon.game.code.codedefinition"},{"l":"ch.joth.games.pocketsimon.game.code.codeimplementation"}];updateSearchResults();
