@@ -7,7 +7,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-
+/**
+ * GameSettingsView class extends JFrame and represents the game settings view.
+ * It allows the user to select the color mode and sound mode for the game.
+ */
 public class GameSettingsView extends JFrame {
     public ServiceFactory serviceFactory = new ServiceFactory();
     JLabel labelButtonColor;
@@ -20,7 +23,11 @@ public class GameSettingsView extends JFrame {
     JRadioButton radioButtonSound;
     ButtonGroup buttonGroupSoundMode;
     JButton submitButton;
-
+    /**
+     * Constructor for the GameSettingsView class.
+     * Initializes the game settings view with the title, size, default close operation, layout, and location.
+     * Also initializes the components for the color mode and sound mode selection.
+     */
     public GameSettingsView() {
         this.setTitle(serviceFactory.ConfigService().getValue(eConfigValues.GAME_TITLE) + " - Game Setup");
         this.setSize(Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_WIDTH)), Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_HEIGHT)));
@@ -74,7 +81,11 @@ public class GameSettingsView extends JFrame {
         settingsPanel.add(submitButton, gridBagConstraints);
         this.add(settingsPanel);
     }
-
+    /**
+     * Sets the action listener for the buttons in the game settings view.
+     *
+     * @param listener the ActionListener to be set for the buttons
+     */
     public void setButtonActionListener(ActionListener listener) {
         submitButton.addActionListener(listener);
         radioButtonColor.addActionListener(listener);
