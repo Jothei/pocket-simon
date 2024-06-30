@@ -12,9 +12,16 @@ import java.awt.event.ActionListener;
  * It contains buttons to start and exit the game.
  */
 public class MainView extends JFrame {
-    private final JButton startGameButton;
-    private final JButton exitGameButton;
 
+    /**
+     * Button to start the game. When clicked, the game will begin.
+     */
+    private final JButton startGameButton;
+
+    /**
+     * Button to exit the game. When clicked, the game will close.
+     */
+    private final JButton exitGameButton;
     /**
      * Constructor for MainView.
      * Initializes the frame with title, size, layout and buttons.
