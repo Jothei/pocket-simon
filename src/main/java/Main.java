@@ -9,6 +9,13 @@ import ch.joth.games.pocketsimon.game.MainView;
  */
 public class Main {
     /**
+     * Default constructor for the Main class.
+     * It is used to create an instance of the Main class.
+     */
+    public Main(){
+
+    }
+    /**
      * The main method is the entry point of the application.
      * It creates instances of the MainModel, MainView, and MainController classes,
      * and sets the view to be visible.
