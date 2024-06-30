@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
  * It uses the ServiceFactory to access various services and the GameSettingsModel to handle the game settings logic.
  */
 public class GameSettingsController {
-    private  final GameSettingsView view;
+    private final GameSettingsView view;
 
     /**
      * Default constructor for GameSettingsController.
@@ -54,10 +54,10 @@ public class GameSettingsController {
          * Constructor for SettingsButtonListener.
          * Initializes the service, soundModeGroup, colorModeGroup and model with the provided instances.
          *
-         * @param view an instance of GameSettingsView
+         * @param view           an instance of GameSettingsView
          * @param colorModeGroup a ButtonGroup instance for color mode
          * @param soundModeGroup a ButtonGroup instance for sound mode
-         * @param model an instance of GameSettingsModel
+         * @param model          an instance of GameSettingsModel
          */
         public SettingsButtonListener(GameSettingsView view, ButtonGroup colorModeGroup, ButtonGroup soundModeGroup, GameSettingsModel model) {
             this.colorModeGroup = colorModeGroup;
