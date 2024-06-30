@@ -9,15 +9,16 @@ import javax.sound.sampled.*;
 import java.util.Objects;
 
 /**
- * This class represents the audio service for the game.
- * It implements the IAudioService interface and LineListener for handling audio events.
+ * AudioService class implements IAudioService and LineListener.
+ * It is responsible for handling the audio events and playing the sound files.
  */
 public class AudioService implements IAudioService {
 
     /**
-     * This method plays a sound file.
+     * Plays the sound file with the provided file name.
+     * Logs an error if there is an exception during playback.
      *
-     * @param fileName The name of the sound file to play.
+     * @param fileName a string representing the name of the sound file
      */
     private void playSound(String fileName) {
 
@@ -27,8 +28,6 @@ public class AudioService implements IAudioService {
             AudioFormat format;
             DataLine.Info info;
             Clip clip;
-
-
 
             stream = AudioSystem.getAudioInputStream(Objects.requireNonNull(getClass().getResourceAsStream("/music/" + fileName)));
             format = stream.getFormat();
@@ -40,7 +39,6 @@ public class AudioService implements IAudioService {
             }
             clip.start();
 
-
         } catch (Exception e) {
 
             new ServiceFactory().LoggingService().log("Error during playback of sound file: " + fileName, Level.ERROR, e.getClass());
@@ -49,6 +47,13 @@ public class AudioService implements IAudioService {
 
     }
 
+    /**
+     * Plays the sound file based on the provided eSoundFile.
+     * Calls the playSound method with the corresponding file name.
+     * Logs an error if the sound file is not found.
+     *
+     * @param soundFile an instance of eSoundFile
+     */
     public void playSound(eSoundFile soundFile) {
         switch (soundFile) {
             case Red:
@@ -70,8 +75,6 @@ public class AudioService implements IAudioService {
             default:
                 new ServiceFactory().LoggingService().log("Sound file not found: " + soundFile, Level.ERROR, getClass());
                 break;
-
-
         }
     }
 
