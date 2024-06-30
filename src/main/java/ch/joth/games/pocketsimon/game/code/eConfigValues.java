@@ -12,8 +12,17 @@ public enum eConfigValues {
      * Game title config value.
      */
     GAME_TITLE,
+    /**
+     * Delimiter Symbol config value.
+     */
     DELIMITER_Symbol,
+    /**
+     * Menu Width config value.
+     */
     MENU_WIDTH,
+    /**
+     * Menu Height config value.
+     */
     MENU_HEIGHT,
 
 }
