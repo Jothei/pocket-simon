@@ -29,7 +29,7 @@ public class MainView extends JFrame {
     public MainView() {
         ServiceFactory serviceFactory = new ServiceFactory();
         // Set the title of the frame
-        this.setTitle(serviceFactory.ConfigService().getValue(eConfigValues.GAME_TITLE) + " - Main Menu");
+        this.setTitle(serviceFactory.ConfigService().getValue(eConfigValues.GAME_TITLE) + " - ch.joth.games.pocketsimon.game.Main Menu");
         // Set the size of the frame
         this.setSize(Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_WIDTH)), Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_HEIGHT)));
         // Set the default close operation

@@ -96,7 +96,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     }
 
     /**
-     * Create Main GUI Frame. and Start Game
+     * Create ch.joth.games.pocketsimon.game.Main GUI Frame. and Start Game
      */
     public void startGame() {
         // Start the game
