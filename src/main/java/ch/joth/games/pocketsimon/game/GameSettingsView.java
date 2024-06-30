@@ -12,16 +12,51 @@ import java.awt.event.ActionListener;
  * It allows the user to select the color mode and sound mode for the game.
  */
 public class GameSettingsView extends JFrame {
+    /**
+     * ServiceFactory instance used to access various services.
+     */
     public ServiceFactory serviceFactory = new ServiceFactory();
+    /**
+     * JLabel for the color mode selection.
+     */
     JLabel labelButtonColor;
+    /**
+     * JRadioButton for the No Color mode selection.
+     */
     JRadioButton radioButtonNoColor;
+    /**
+     * JRadioButton for the Color mode selection.
+     */
     JRadioButton radioButtonColor;
+    /**
+     * JRadioButton for the Audio Only mode selection.
+     */
     JRadioButton radioButtonAudioOnlyMode;
+    /**
+     * ButtonGroup for the color mode selection.
+     */
     ButtonGroup buttonGroupColorMode;
+    /**
+     * JLabel for the sound mode selection.
+     */
     JLabel labelSoundMode;
+    /**
+     * JRadioButton for the No Sound mode selection.
+     */
     JRadioButton radioButtonNoSound;
+
+    /**
+     * JRadioButton for the Sound mode selection.
+     */
     JRadioButton radioButtonSound;
+
+    /**
+     * ButtonGroup for the sound mode selection.
+     */
     ButtonGroup buttonGroupSoundMode;
+    /**
+     * JButton for submitting the selected settings.
+     */
     JButton submitButton;
     /**
      * Constructor for the GameSettingsView class.
