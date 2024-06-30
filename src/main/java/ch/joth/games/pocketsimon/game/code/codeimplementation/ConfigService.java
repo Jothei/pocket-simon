@@ -18,6 +18,12 @@ import java.util.stream.Collectors;
 public class ConfigService implements IConfigService {
 
     /**
+     * Default constructor for the ConfigService class.
+     * It is used to create an instance of the ConfigService class.
+     */
+    public ConfigService() {
+    }
+    /**
      * This method returns a BufferedReader for the config.json file located in the resources folder.
      * If the file is not found, it logs an error and throws an IllegalArgumentException.
      *

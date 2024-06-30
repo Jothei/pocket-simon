@@ -11,6 +11,13 @@ import org.apache.logging.log4j.Logger;
 public class LoggingService implements ILoggingService {
 
     /**
+     * Default constructor for the LoggingService class.
+     * It is used to create an instance of the LoggingService class.
+     */
+    public LoggingService() {
+    }
+
+    /**
      * This method logs a message with a specific level, class, and object.
      * @param message The message to be logged.
      * @param logLevel The level of the log.

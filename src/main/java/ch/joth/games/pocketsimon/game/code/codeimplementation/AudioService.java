@@ -13,6 +13,12 @@ import java.util.Objects;
  * It is responsible for handling the audio events and playing the sound files.
  */
 public class AudioService implements IAudioService {
+    /**
+     * Default constructor for the AudioService class.
+     * It is used to create an instance of the AudioService class.
+     */
+    public AudioService() {
+    }
 
     /**
      * Plays the sound file with the provided file name.

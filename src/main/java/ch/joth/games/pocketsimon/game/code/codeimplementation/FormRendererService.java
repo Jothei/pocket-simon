@@ -10,6 +10,14 @@ import java.awt.*;
 public class FormRendererService extends JPanel {
 
     /**
+     * Default constructor for the FormRendererService class.
+     * It is used to create an instance of the FormRendererService class.
+     */
+    public FormRendererService(){
+
+    }
+
+    /**
      * Width of the game form.
      */
     public static final int WIDTH = 800;

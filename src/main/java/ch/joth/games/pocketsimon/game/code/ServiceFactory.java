@@ -6,6 +6,15 @@ import ch.joth.games.pocketsimon.game.code.codeimplementation.*;
  * This class is a factory for creating instances of various services.
   */
 public class ServiceFactory {
+
+    /**
+     * Default constructor for the ServiceFactory class.
+     * It is used to create an instance of the ServiceFactory class.
+     */
+    public ServiceFactory(){
+
+    }
+
     private AudioService _audioService;
 
     /**
