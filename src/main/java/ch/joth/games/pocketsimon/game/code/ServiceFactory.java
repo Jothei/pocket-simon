@@ -85,4 +85,12 @@ public class ServiceFactory {
         return _configService;
     }
 
+
+    public void reset(){
+        _audioService = null;
+        _gameBehaviour = null;
+        _formRenderer = null;
+        _loggingService = null;
+        _configService = null;
+    }
 }

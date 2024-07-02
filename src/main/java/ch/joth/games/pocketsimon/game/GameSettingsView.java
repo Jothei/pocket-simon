@@ -70,6 +70,11 @@ public class GameSettingsView extends JFrame {
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
 
+        JPanel settingsPanel = getPanel();
+        this.add(settingsPanel);
+    }
+
+  public  JPanel getPanel() {
         // Initialize Components
         JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new GridBagLayout());
@@ -114,8 +119,9 @@ public class GameSettingsView extends JFrame {
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.anchor = GridBagConstraints.CENTER;
         settingsPanel.add(submitButton, gridBagConstraints);
-        this.add(settingsPanel);
+        return settingsPanel;
     }
+
     /**
      * Sets the action listener for the buttons in the game settings view.
      *

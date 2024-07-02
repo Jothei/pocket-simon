@@ -13,12 +13,13 @@ public class MainController {
     private final MainModel model;
     private final ServiceFactory serviceFactory;
 
+
     /**
      * Constructor for MainController.
      * Initializes the model and serviceFactory, and sets the action listener for the view.
      *
      * @param model an instance of MainModel
-     * @param view an instance of MainView
+     * @param view  an instance of MainView
      */
     public MainController(MainModel model, MainView view) {
         this.model = model;
