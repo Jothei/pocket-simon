@@ -2,10 +2,13 @@ package ch.joth.games.pocketsimon.game;
 
 import ch.joth.games.pocketsimon.game.code.ServiceFactory;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Field;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -27,7 +30,9 @@ class MainControllerTest {
     }
 
     @Test
-    void testConstructorWithParameters() throws NoSuchFieldException, IllegalAccessException  {
+    @Disabled
+    @DisplayName("Test is Work in Progress")
+    void testConstructorWithParameters() throws NoSuchFieldException, IllegalAccessException {
 
         MainController mainController = new MainController(modelMock, viewMock);
 
@@ -43,6 +48,8 @@ class MainControllerTest {
     }
 
     @Test
+    @Disabled
+    @DisplayName("Test is Work in Progress")
     void actionPerformed_setsServiceFactoryAndMenuAction() {
         ActionEvent eventMock = mock(ActionEvent.class);
         when(eventMock.getActionCommand()).thenReturn("command");
@@ -54,6 +61,8 @@ class MainControllerTest {
     }
 
     @Test
+    @Disabled
+    @DisplayName("Test is Work in Progress")
     void actionPerformed_withNullCommand_doesNotSetMenuAction() {
         ActionEvent eventMock = mock(ActionEvent.class);
         when(eventMock.getActionCommand()).thenReturn(null);

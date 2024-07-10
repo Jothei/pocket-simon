@@ -1,6 +1,5 @@
 package ch.joth.games.pocketsimon.game;
-
-/**
+ /**
  * The ch.joth.games.pocketsimon.game.Main class is the entry point of the application.
  * It creates instances of the MainModel, MainView, and MainController classes,
  * and sets the view to be visible.

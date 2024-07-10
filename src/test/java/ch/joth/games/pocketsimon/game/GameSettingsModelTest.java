@@ -49,7 +49,7 @@ class GameSettingsModelTest {
     }
 
     @Test
-    void testGetSelectedButtonText() throws  InvocationTargetException, IllegalAccessException {
+    void testGetSelectedButtonText() throws InvocationTargetException, IllegalAccessException {
 
         ButtonGroup soundGroup = new ButtonGroup();
         soundGroup.add(new JRadioButton("Sound enabled", true));
