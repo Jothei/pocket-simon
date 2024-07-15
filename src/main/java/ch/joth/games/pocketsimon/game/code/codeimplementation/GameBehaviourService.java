@@ -253,8 +253,10 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     public void mouseClicked(MouseEvent e) {
 
     }
+
     /**
      * This method is used to get the current color mode of the game.
+     *
      * @return colorMode - The current color mode of the game.
      */
     public eColorMode getColorMode() {
@@ -263,6 +265,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
     /**
      * This method is used to get the current sound mode of the game.
+     *
      * @return soundMode - The current sound mode of the game.
      */
     public eSoundMode getSoundMode() {

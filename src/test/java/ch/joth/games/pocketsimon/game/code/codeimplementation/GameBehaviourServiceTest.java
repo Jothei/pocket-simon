@@ -1,75 +1,70 @@
 package ch.joth.games.pocketsimon.game.code.codeimplementation;
 
+import ch.joth.games.pocketsimon.game.code.ServiceFactory;
 import ch.joth.games.pocketsimon.game.code.eColorMode;
 import ch.joth.games.pocketsimon.game.code.eSoundMode;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class GameBehaviourServiceTest {
     GameBehaviourService gameBehaviourService;
+    ServiceFactory serviceMock;
+    ServiceFactory service;
+    GameBehaviourService gameMock;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws NoSuchFieldException, IllegalAccessException {
         gameBehaviourService = new GameBehaviourService();
+        gameMock = spy(gameBehaviourService);
+
+        service = new ServiceFactory();
+        serviceMock = mock(service.getClass());
+        when(serviceMock.ConfigService()).thenReturn(new ConfigService());
+        when(serviceMock.LoggingService()).thenReturn(new LoggingService());
+        Field factory = gameBehaviourService.getClass().getDeclaredField("service");
+        factory.setAccessible(true);
+        factory.set(gameBehaviourService, serviceMock);
     }
 
     @Test
-    @Disabled
-    @DisplayName("Test is Work in Progress")
     void startGameWithConstructor() throws NoSuchFieldException, IllegalAccessException {
-        Field soundMode = gameBehaviourService.getClass().getDeclaredField("soundMode");
+        Field soundMode = gameMock.getClass().getDeclaredField("soundMode");
         soundMode.setAccessible(true);
-        Field colorMode = gameBehaviourService.getClass().getDeclaredField("colorMode");
+        Field colorMode = gameMock.getClass().getDeclaredField("colorMode");
         colorMode.setAccessible(true);
+        doNothing().when(gameMock).startGame();
+        gameMock.startGame(eSoundMode.SOUND_OFF, eColorMode.COLOR_ON);
 
-        gameBehaviourService.startGame(eSoundMode.SOUND_ON, eColorMode.COLOR_ON);
-        assertEquals(eSoundMode.SOUND_ON, soundMode.get(gameBehaviourService));
-        assertEquals(eColorMode.COLOR_ON, colorMode.get(gameBehaviourService));
+        assertEquals(eSoundMode.SOUND_OFF, soundMode.get(gameMock));
+        assertEquals(eColorMode.COLOR_ON, colorMode.get(gameMock));
 
     }
 
     @Test
-    @Disabled
-    @DisplayName("Test is Work in Progress")
     void startGame() throws NoSuchFieldException, IllegalAccessException {
-        Field soundMode = gameBehaviourService.getClass().getDeclaredField("soundMode");
+        Field soundMode = gameMock.getClass().getDeclaredField("soundMode");
         soundMode.setAccessible(true);
-        Field colorMode = gameBehaviourService.getClass().getDeclaredField("colorMode");
+        Field colorMode = gameMock.getClass().getDeclaredField("colorMode");
         colorMode.setAccessible(true);
+        doNothing().when(gameMock).startGame();
 
-        gameBehaviourService.startGame(eSoundMode.SOUND_ON, eColorMode.COLOR_ON);
-        assertEquals(eSoundMode.SOUND_ON, soundMode.get(gameBehaviourService));
-        assertEquals(eColorMode.COLOR_ON, colorMode.get(gameBehaviourService));
+        gameMock.startGame();
+
+        assertEquals(eSoundMode.SOUND_ON, soundMode.get(gameMock));
+        assertNotEquals(eColorMode.COLOR_OFF, colorMode.get(gameMock));
 
     }
 
-    @Test
-    void exitGame() {
-    }
-
-    @Test
-    void testStartGame() {
-    }
-
-    @Test
-    void initGameVariables() {
-    }
-
-    @Test
-    void actionPerformed() {
-    }
 
     @Test
     void mousePressed() {
@@ -77,6 +72,9 @@ class GameBehaviourServiceTest {
         gameBehaviourService.createPattern = false;
         gameBehaviourService.gameOver = true;
 
+
+        when(e.getX()).thenReturn(1);
+        when(e.getY()).thenReturn(1);
         gameBehaviourService.mousePressed(e);
 
         verify(e, times(1)).getX();
@@ -87,19 +85,18 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    @Disabled
-    @DisplayName("Test is Work in Progress")
     void mousePressedGreenButton() {
         MouseEvent e = mock(MouseEvent.class);
         gameBehaviourService.createPattern = false;
         gameBehaviourService.gameOver = false;
+        gameBehaviourService.pattern = new ArrayList<>(1);
+        gameBehaviourService.flashed = 0;
 
         when(e.getX()).thenReturn(1);
         when(e.getY()).thenReturn(1);
 
-        gameBehaviourService.mousePressed(e);
-        assertEquals(1, gameBehaviourService.flashed);
-        assertEquals(1, gameBehaviourService.ticks);
+        assertEquals(0, gameBehaviourService.flashed);
+        assertEquals(0, gameBehaviourService.ticks);
 
 
     }

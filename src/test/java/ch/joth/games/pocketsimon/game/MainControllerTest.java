@@ -2,8 +2,6 @@ package ch.joth.games.pocketsimon.game;
 
 import ch.joth.games.pocketsimon.game.code.ServiceFactory;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.ActionEvent;
@@ -14,24 +12,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class MainControllerTest {
-    MainModel model;
-    MainView view;
-    private MainController controller;
-    private MainModel modelMock;
-    private MainView viewMock;
+    MainController controller;
+    MainModel modelMock;
+    MainView viewMock;
+    ActionEvent eventMock;
 
     @BeforeEach
     void setUp() {
-        model = new MainModel();
         modelMock = mock(MainModel.class);
-        view = new MainView();
         viewMock = mock(MainView.class);
         controller = new MainController(modelMock, viewMock);
+        eventMock = mock(ActionEvent.class);
     }
 
     @Test
-    @Disabled
-    @DisplayName("Test is Work in Progress")
     void testConstructorWithParameters() throws NoSuchFieldException, IllegalAccessException {
 
         MainController mainController = new MainController(modelMock, viewMock);
@@ -41,17 +35,14 @@ class MainControllerTest {
         Field serviceFactory = mainController.getClass().getDeclaredField("serviceFactory");
         serviceFactory.setAccessible(true);
 
-        verify(viewMock, atLeastOnce()).setButtonActionListener(any());
+        verify(viewMock, times(2)).setButtonActionListener(any());
         assertNotNull(model.get(mainController));
         assertNotNull(serviceFactory.get(mainController));
 
     }
 
     @Test
-    @Disabled
-    @DisplayName("Test is Work in Progress")
     void actionPerformed_setsServiceFactoryAndMenuAction() {
-        ActionEvent eventMock = mock(ActionEvent.class);
         when(eventMock.getActionCommand()).thenReturn("command");
 
         controller.new MenuButtonListener().actionPerformed(eventMock);
@@ -61,10 +52,7 @@ class MainControllerTest {
     }
 
     @Test
-    @Disabled
-    @DisplayName("Test is Work in Progress")
     void actionPerformed_withNullCommand_doesNotSetMenuAction() {
-        ActionEvent eventMock = mock(ActionEvent.class);
         when(eventMock.getActionCommand()).thenReturn(null);
 
         controller.new MenuButtonListener().actionPerformed(eventMock);
