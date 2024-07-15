@@ -107,7 +107,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         frame.setResizable(false);
         frame.add(this.renderer);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         initGameVariables();
         timer.start();
     }
