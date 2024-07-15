@@ -106,6 +106,7 @@ class GameBehaviourServiceTest {
     void paint() {
         Graphics2D g = mock(Graphics2D.class);
         doNothing().when(g).drawString(anyString(), anyInt(), anyInt());
+        verify(g, never()).drawString(anyString(), anyInt(), anyInt());
         gameBehaviourService.paint(g);
     }
 

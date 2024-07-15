@@ -15,32 +15,32 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-public class ConfigServiceTest {
+class ConfigServiceTest {
     private ConfigService configService;
     private IConfigService mockConfigService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         ServiceFactory serviceFactory = new ServiceFactory();
         configService = serviceFactory.ConfigService();
         mockConfigService = Mockito.mock(IConfigService.class);
     }
 
     @Test
-    public void getConfigFileBuffer_returnsBufferedReaderForValidFile() {
+    void getConfigFileBuffer_returnsBufferedReaderForValidFile() {
         BufferedReader reader = configService.getConfigFileBuffer();
         assertEquals(BufferedReader.class, reader.getClass());
     }
 
     @Test
-    public void testGetFileBuffer_returnsBufferedReaderForValidFile() {
+    void testGetFileBuffer_returnsBufferedReaderForValidFile() {
         assertDoesNotThrow(() -> configService.getConfigFileBuffer());
 
     }
 
 
     @Test
-    public void getValue_returnsValueForValidKey() throws IOException {
+    void getValue_returnsValueForValidKey() throws IOException {
         String json = "{\"GAME_TITLE\":\"Pocket Simon\"}";
         BufferedReader reader = new BufferedReader(new StringReader(json));
         when(mockConfigService.getConfigFileBuffer()).thenReturn(reader);

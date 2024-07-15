@@ -34,7 +34,7 @@ class GameBehaviourTest {
         formRenderer = new FormRendererService();
     }
 
-   @ParameterizedTest
+    @ParameterizedTest
     @CsvSource({
             "SOUND_ON, COLOR_ON",
             "SOUND_OFF, COLOR_OFF",
@@ -132,7 +132,7 @@ class GameBehaviourTest {
         gameBehaviour.flashed = 2;
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertTrue(gameBehaviour.pattern.get(0) != gameBehaviour.flashed);
+        assertNotEquals(gameBehaviour.pattern.get(0), gameBehaviour.flashed);
     }
 
     @Test
