@@ -15,7 +15,7 @@ public class GameSettingsView extends JFrame {
     /**
      * ServiceFactory instance used to access various services.
      */
-    public ServiceFactory serviceFactory = new ServiceFactory();
+    final ServiceFactory serviceFactory = new ServiceFactory();
     /**
      * JLabel for the color mode selection.
      */
@@ -58,6 +58,7 @@ public class GameSettingsView extends JFrame {
      * JButton for submitting the selected settings.
      */
     JButton submitButton;
+
     /**
      * Constructor for the GameSettingsView class.
      * Initializes the game settings view with the title, size, default close operation, layout, and location.
@@ -74,7 +75,7 @@ public class GameSettingsView extends JFrame {
         this.add(settingsPanel);
     }
 
-  public  JPanel getPanel() {
+    public JPanel getPanel() {
         // Initialize Components
         JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new GridBagLayout());
@@ -135,8 +136,6 @@ public class GameSettingsView extends JFrame {
         radioButtonNoSound.addActionListener(listener);
         radioButtonSound.addActionListener(listener);
     }
-
-
 
 
 }

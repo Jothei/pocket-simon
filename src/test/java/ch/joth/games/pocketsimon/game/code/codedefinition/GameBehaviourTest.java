@@ -12,11 +12,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Field;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class GameBehaviourTest {
     public GameBehaviourService gameBehaviour;
@@ -42,21 +42,23 @@ class GameBehaviourTest {
             "SOUND_OFF, COLOR_ON"
     })
     void testStartGame(eSoundMode soundMode, eColorMode colorMode) {
-        doNothing().when(gameBehaviourMock).startGame();
+        GameBehaviourService gameSpy = spy(gameBehaviour);
+        doNothing().when(gameSpy).startGame();
+        
+        gameSpy.startGame(soundMode, colorMode);
 
-        gameBehaviourMock.startGame(eSoundMode.SOUND_ON, eColorMode.COLOR_ON);
-
-        assertEquals(eSoundMode.SOUND_ON, gameBehaviour.getSoundMode());
-        assertEquals(eColorMode.COLOR_ON, gameBehaviour.getColorMode());
+        assertEquals(soundMode, gameSpy.getSoundMode());
+        assertEquals(colorMode, gameSpy.getColorMode());
 
 
     }
 
     @Test
-    void testInitGameVariables() {
+    void testInitGameVariables() throws NoSuchFieldException, IllegalAccessException {
         gameBehaviour.initGameVariables();
-
-        assertEquals(0, gameBehaviour.indexPattern);
+        Field indexPatternField = gameBehaviour.getClass().getDeclaredField("indexPattern");
+        indexPatternField.setAccessible(true);
+        assertEquals(0, indexPatternField.get(gameBehaviour));
         assertEquals(2, gameBehaviour.dark);
         assertEquals(0, gameBehaviour.flashed);
         assertEquals(0, gameBehaviour.ticks);

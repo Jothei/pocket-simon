@@ -47,7 +47,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * The current index in the pattern that the player needs to follow.
      */
-    public int indexPattern;
+    private int indexPattern;
     /**
      * The number of ticks until the game goes dark. When it reaches 0, the game goes dark.
      */
