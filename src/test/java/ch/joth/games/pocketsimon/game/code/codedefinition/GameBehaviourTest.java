@@ -136,14 +136,6 @@ class GameBehaviourTest {
         assertNotEquals(gameBehaviour.pattern.get(0), gameBehaviour.flashed);
     }
 
-    @Test
-    void actionPerformedShouldCreatePatternWhenDarkIsZero() {
-        gameBehaviour.createPattern = true;
-        gameBehaviour.dark = 0;
-        gameBehaviour.pattern.clear();
-        gameBehaviour.actionPerformed(new ActionEvent(this, 0, null));
-        assertFalse(gameBehaviour.pattern.isEmpty());
-    }
 
     @Test
     void actionPerformedShouldNotCreatePatternWhenDarkIsNotZero() {

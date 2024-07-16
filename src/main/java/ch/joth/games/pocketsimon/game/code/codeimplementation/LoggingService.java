@@ -15,14 +15,16 @@ public class LoggingService implements ILoggingService {
      * It is used to create an instance of the LoggingService class.
      */
     public LoggingService() {
+        //Add comment to prevent JavaDoc warning.
     }
 
     /**
      * This method logs a message with a specific level, class, and object.
-     * @param message The message to be logged.
+     *
+     * @param message  The message to be logged.
      * @param logLevel The level of the log.
      * @param logClass The class where the log is being made.
-     * @param obj The object to be logged.
+     * @param obj      The object to be logged.
      */
     public void log(String message, Level logLevel, Class<?> logClass, Object obj) {
         Logger logger = LogManager.getLogger(logClass);
@@ -31,7 +33,8 @@ public class LoggingService implements ILoggingService {
 
     /**
      * This method logs a message with a specific level and class.
-     * @param message The message to be logged.
+     *
+     * @param message  The message to be logged.
      * @param logLevel The level of the log.
      * @param logClass The class where the log is being made.
      */

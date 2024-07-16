@@ -251,7 +251,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        //Add comment to prevent JavaDoc warning.
     }
 
     /**
@@ -280,7 +280,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mousePressed(MouseEvent e) {
-        int x = e.getX(), y = e.getY();
+        int x = e.getX();
+        int y = e.getY();
 
         if (!createPattern && !gameOver) {
             if (FormRendererService.isGreenButton(x, y)) {
@@ -360,7 +361,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-
+        //Add comment to prevent JavaDoc warning.
     }
 
     /**
@@ -368,7 +369,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        //Add comment to prevent JavaDoc warning.
     }
 
     /**
@@ -376,6 +377,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseExited(MouseEvent e) {
+        //Add comment to prevent JavaDoc warning.
 
     }
 
