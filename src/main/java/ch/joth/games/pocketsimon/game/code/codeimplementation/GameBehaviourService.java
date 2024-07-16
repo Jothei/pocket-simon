@@ -26,7 +26,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * Singleton instance of the GameBehaviour class.
      */
-    public static GameBehaviourService gameBehaviour;
+    static GameBehaviourService gameBehaviour;
     /**
      * Instance of the ServiceFactory class used to access various services like audio and logging.
      */

@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Level;
  * It uses the ServiceFactory to access various services like logging and game behavior.
  */
 public class MainModel {
-    public GameSettingsController gameSettingsController;
+    private GameSettingsController gameSettingsController;
     private ServiceFactory serviceFactory;
 
     /**

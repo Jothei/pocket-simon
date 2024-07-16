@@ -1,5 +1,6 @@
 package ch.joth.games.pocketsimon.game;
- /**
+
+/**
  * The ch.joth.games.pocketsimon.game.Main class is the entry point of the application.
  * It creates instances of the MainModel, MainView, and MainController classes,
  * and sets the view to be visible.
@@ -9,9 +10,10 @@ public class Main {
      * Default constructor for the ch.joth.games.pocketsimon.game.Main class.
      * It is used to create an instance of the ch.joth.games.pocketsimon.game.Main class.
      */
-    public Main(){
-
+    public Main() {
+//Intentionally left empty to avoid JavaDoc warnings
     }
+
     /**
      * The main method is the entry point of the application.
      * It creates instances of the MainModel, MainView, and MainController classes,
