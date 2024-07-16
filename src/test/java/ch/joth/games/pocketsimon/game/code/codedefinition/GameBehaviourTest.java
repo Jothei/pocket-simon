@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -44,7 +45,7 @@ class GameBehaviourTest {
     void testStartGame(eSoundMode soundMode, eColorMode colorMode) {
         GameBehaviourService gameSpy = spy(gameBehaviour);
         doNothing().when(gameSpy).startGame();
-        
+
         gameSpy.startGame(soundMode, colorMode);
 
         assertEquals(soundMode, gameSpy.getSoundMode());
@@ -103,21 +104,19 @@ class GameBehaviourTest {
         assertFalse(gameBehaviour.pattern.isEmpty());
     }
 
-    @Test
-    void mousePressed_resetsGameWhenGameOver() {
-        gameBehaviour.gameOver = true;
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void mousePressed_resetsGameWhenGameOver(Boolean gameOver) {
+        gameBehaviour.gameOver = gameOver;
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertFalse(gameBehaviour.gameOver);
+        if (!gameOver) {
+            assertEquals(false, gameBehaviour.gameOver);
+        } else {
+            assertEquals(false, gameBehaviour.gameOver);
+        }
     }
 
-    @Test
-    void mousePressed_doesNotResetGameWhenNotGameOver() {
-        gameBehaviour.gameOver = false;
-        gameBehaviour.mousePressed(new MouseEvent(new Component() {
-        }, 0, 0, 0, 0, 0, 0, false));
-        assertFalse(gameBehaviour.gameOver);
-    }
 
     @Test
     void mousePressed_correctPatternDoesNotEndGame() {

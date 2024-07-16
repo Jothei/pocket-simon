@@ -40,7 +40,7 @@ class GameSettingsControllerTest {
     }
 
     @Test
-    void testActionPerformed() throws NoSuchFieldException, IllegalAccessException {
+    void testActionPerformed() {
         GameSettingsController controller = new GameSettingsController(viewMock);
         GameSettingsModel modelMock = mock(GameSettingsModel.class);
         GameSettingsController.SettingsButtonListener listener = controller.new SettingsButtonListener(viewMock, viewMock.buttonGroupColorMode, viewMock.buttonGroupSoundMode, modelMock);
