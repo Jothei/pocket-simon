@@ -43,7 +43,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * The number of ticks since the game started. A tick is a unit of time used in the game.
      */
-    public int ticks;
+    private int ticks;
     /**
      * The current index in the pattern that the player needs to follow.
      */
@@ -59,11 +59,11 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * The pattern that the player needs to follow. It is a list of integers where each integer represents a button.
      */
-    public ArrayList<Integer> pattern = new ArrayList<>();
+    private ArrayList<Integer> pattern = new ArrayList<>();
     /**
      * A random number generator used to create the pattern.
      */
-    public SecureRandom randomizer;
+    private SecureRandom randomizer;
     /**
      * A boolean indicating whether the game is over. If true, the game is over.
      */

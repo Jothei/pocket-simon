@@ -21,6 +21,8 @@ class GameBehaviourServiceTest {
     ServiceFactory serviceMock;
     ServiceFactory service;
     GameBehaviourService gameMock;
+    ArrayList<Integer> pattern;
+    int ticks;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -31,9 +33,19 @@ class GameBehaviourServiceTest {
         serviceMock = mock(service.getClass());
         when(serviceMock.ConfigService()).thenReturn(new ConfigService());
         when(serviceMock.LoggingService()).thenReturn(new LoggingService());
+
         Field factory = gameBehaviourService.getClass().getDeclaredField("service");
         factory.setAccessible(true);
         factory.set(gameBehaviourService, serviceMock);
+
+        Field patternField = gameBehaviourService.getClass().getDeclaredField("pattern");
+        patternField.setAccessible(true);
+        pattern = (ArrayList<Integer>) patternField.get(gameBehaviourService);
+        
+        Field ticksField = gameBehaviourService.getClass().getDeclaredField("ticks");
+        ticksField.setAccessible(true);
+        ticks = (Integer) ticksField.get(gameBehaviourService);
+
     }
 
     @Test
@@ -89,14 +101,14 @@ class GameBehaviourServiceTest {
         MouseEvent e = mock(MouseEvent.class);
         gameBehaviourService.createPattern = false;
         gameBehaviourService.gameOver = false;
-        gameBehaviourService.pattern = new ArrayList<>(1);
+        pattern = new ArrayList<>(1);
         gameBehaviourService.flashed = 0;
 
         when(e.getX()).thenReturn(1);
         when(e.getY()).thenReturn(1);
 
         assertEquals(0, gameBehaviourService.flashed);
-        assertEquals(0, gameBehaviourService.ticks);
+        assertEquals(0, ticks);
 
 
     }
