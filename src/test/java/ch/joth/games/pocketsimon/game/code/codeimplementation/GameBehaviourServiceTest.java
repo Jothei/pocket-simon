@@ -22,6 +22,7 @@ class GameBehaviourServiceTest {
     ServiceFactory service;
     GameBehaviourService gameMock;
     ArrayList<Integer> pattern;
+    Field createPatternField;
     int ticks;
 
     @BeforeEach
@@ -41,10 +42,13 @@ class GameBehaviourServiceTest {
         Field patternField = gameBehaviourService.getClass().getDeclaredField("pattern");
         patternField.setAccessible(true);
         pattern = (ArrayList<Integer>) patternField.get(gameBehaviourService);
-        
+
         Field ticksField = gameBehaviourService.getClass().getDeclaredField("ticks");
         ticksField.setAccessible(true);
         ticks = (Integer) ticksField.get(gameBehaviourService);
+
+        createPatternField = gameBehaviourService.getClass().getDeclaredField("createPattern");
+        createPatternField.setAccessible(true);
 
     }
 
@@ -81,7 +85,7 @@ class GameBehaviourServiceTest {
     @Test
     void mousePressed() {
         MouseEvent e = mock(MouseEvent.class);
-        gameBehaviourService.createPattern = false;
+        this.setPattern(false);
         gameBehaviourService.gameOver = true;
 
 
@@ -99,7 +103,7 @@ class GameBehaviourServiceTest {
     @Test
     void mousePressedGreenButton() {
         MouseEvent e = mock(MouseEvent.class);
-        gameBehaviourService.createPattern = false;
+        this.setPattern(false);
         gameBehaviourService.gameOver = false;
         pattern = new ArrayList<>(1);
         gameBehaviourService.flashed = 0;
@@ -122,5 +126,12 @@ class GameBehaviourServiceTest {
         gameBehaviourService.paint(g);
     }
 
+    private void setPattern(boolean value) {
+        try {
+            this.createPatternField.set(gameBehaviourService, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

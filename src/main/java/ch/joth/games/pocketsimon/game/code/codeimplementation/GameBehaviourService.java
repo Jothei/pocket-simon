@@ -55,7 +55,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * A boolean indicating whether a new pattern should be created. If true, a new pattern is created.
      */
-    public boolean createPattern = true;
+    private boolean createPattern = true;
     /**
      * The pattern that the player needs to follow. It is a list of integers where each integer represents a button.
      */
