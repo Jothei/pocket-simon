@@ -14,7 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
-import java.util.Random;
+import java.security.SecureRandom;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,7 +30,7 @@ class GameBehaviourTest {
     void setUp() {
 
         gameBehaviour = new GameBehaviourService();
-        gameBehaviour.randomizer = new Random();
+        gameBehaviour.randomizer = new SecureRandom();
         gameBehaviourMock = mock(GameBehaviourService.class);
         formRenderer = new FormRendererService();
     }
@@ -111,9 +111,9 @@ class GameBehaviourTest {
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
         if (!gameOver) {
-            assertEquals(false, gameBehaviour.gameOver);
+            assertFalse(gameBehaviour.gameOver);
         } else {
-            assertEquals(false, gameBehaviour.gameOver);
+            assertFalse(gameBehaviour.gameOver);
         }
     }
 

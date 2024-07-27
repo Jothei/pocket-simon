@@ -9,8 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Random;
 
 import static ch.joth.games.pocketsimon.game.code.codeimplementation.FormRendererService.HEIGHT;
 import static ch.joth.games.pocketsimon.game.code.codeimplementation.FormRendererService.WIDTH;
@@ -63,7 +63,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * A random number generator used to create the pattern.
      */
-    public Random randomizer;
+    public SecureRandom randomizer;
     /**
      * A boolean indicating whether the game is over. If true, the game is over.
      */
@@ -117,7 +117,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public void initGameVariables() {
         pattern = new ArrayList<>();
-        randomizer = new Random();
+        randomizer = new SecureRandom();
         indexPattern = 0;
         dark = 2;
         flashed = 0;
