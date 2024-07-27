@@ -30,6 +30,7 @@ class GameBehaviourTest {
     public Field ticksField;
     public Field darkField;
     public Field createPatternField;
+    public Field flashedField;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -52,6 +53,9 @@ class GameBehaviourTest {
 
         createPatternField = gameBehaviour.getClass().getDeclaredField("createPattern");
         createPatternField.setAccessible(true);
+
+        flashedField = gameBehaviour.getClass().getDeclaredField("flashed");
+        flashedField.setAccessible(true);
 
         gameBehaviourMock = mock(GameBehaviourService.class);
         formRenderer = new FormRendererService();
@@ -82,7 +86,8 @@ class GameBehaviourTest {
         Field indexPatternField = gameBehaviour.getClass().getDeclaredField("indexPattern");
         indexPatternField.setAccessible(true);
         assertEquals(0, indexPatternField.get(gameBehaviour));
-        assertEquals(0, gameBehaviour.flashed);
+
+        assertEquals(0, getFlashed());
         assertEquals(0, (Integer) ticksField.get(gameBehaviour));
     }
 
@@ -129,7 +134,8 @@ class GameBehaviourTest {
     @Test
     void mousePressed_correctPatternDoesNotEndGame() {
         pattern.add(1);
-        gameBehaviour.flashed = 1;
+
+        setFlashed(1);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
         assertFalse(gameBehaviour.gameOver);
@@ -138,10 +144,10 @@ class GameBehaviourTest {
     @Test
     void mousePressed_incorrectPatternEndsGame() {
         pattern.add(1);
-        gameBehaviour.flashed = 2;
+        setFlashed(2);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertNotEquals(pattern.get(0), gameBehaviour.flashed);
+        assertNotEquals(pattern.get(0), getFlashed());
     }
 
 
@@ -173,8 +179,7 @@ class GameBehaviourTest {
     @Test
     void mousePressedShouldEndGameWhenPatternIsIncorrect() {
         pattern.add(1);
-        gameBehaviour.flashed = 2;
-
+        setFlashed(2);
         this.setPattern(false);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
@@ -193,6 +198,23 @@ class GameBehaviourTest {
     private void setPattern(boolean value) {
         try {
             this.createPatternField.set(gameBehaviour, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setFlashed(Integer value) {
+        try {
+            this.flashedField.set(gameBehaviour, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Integer getFlashed() {
+        try {
+            return (Integer) this.flashedField.get(gameBehaviour);
+
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }

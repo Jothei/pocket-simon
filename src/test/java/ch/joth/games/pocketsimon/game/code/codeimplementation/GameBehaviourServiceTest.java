@@ -23,6 +23,7 @@ class GameBehaviourServiceTest {
     GameBehaviourService gameMock;
     ArrayList<Integer> pattern;
     Field createPatternField;
+    Field flashedField;
     int ticks;
 
     @BeforeEach
@@ -46,6 +47,9 @@ class GameBehaviourServiceTest {
         Field ticksField = gameBehaviourService.getClass().getDeclaredField("ticks");
         ticksField.setAccessible(true);
         ticks = (Integer) ticksField.get(gameBehaviourService);
+
+        flashedField = gameBehaviourService.getClass().getDeclaredField("flashed");
+        flashedField.setAccessible(true);
 
         createPatternField = gameBehaviourService.getClass().getDeclaredField("createPattern");
         createPatternField.setAccessible(true);
@@ -106,12 +110,11 @@ class GameBehaviourServiceTest {
         this.setPattern(false);
         gameBehaviourService.gameOver = false;
         pattern = new ArrayList<>(1);
-        gameBehaviourService.flashed = 0;
-
+        this.setFlashed(0);
         when(e.getX()).thenReturn(1);
         when(e.getY()).thenReturn(1);
 
-        assertEquals(0, gameBehaviourService.flashed);
+        assertEquals(0, getFlashed());
         assertEquals(0, ticks);
 
 
@@ -129,6 +132,22 @@ class GameBehaviourServiceTest {
     private void setPattern(boolean value) {
         try {
             this.createPatternField.set(gameBehaviourService, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setFlashed(Integer value) {
+        try {
+            this.flashedField.set(gameBehaviourService, value);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Integer getFlashed() {
+        try {
+            return (Integer) this.flashedField.get(gameBehaviourService);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }

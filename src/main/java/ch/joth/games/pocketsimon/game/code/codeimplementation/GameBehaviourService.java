@@ -35,11 +35,11 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * Instance of the FormRenderer class used to render the game GUI.
      */
-    public FormRendererService renderer;
+    private FormRendererService renderer;
     /**
      * The number representing the current button that is flashing. 0 means no button is flashing.
      */
-    public int flashed = 0;
+    private int flashed = 0;
     /**
      * The number of ticks since the game started. A tick is a unit of time used in the game.
      */
