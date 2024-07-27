@@ -51,7 +51,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * The number of ticks until the game goes dark. When it reaches 0, the game goes dark.
      */
-    public int dark;
+    private int dark;
     /**
      * A boolean indicating whether a new pattern should be created. If true, a new pattern is created.
      */

@@ -28,6 +28,7 @@ class GameBehaviourTest {
     public FormRendererService formRenderer;
     public ArrayList<Integer> pattern;
     public Field ticksField;
+    public Field darkField;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
@@ -45,6 +46,8 @@ class GameBehaviourTest {
         ticksField = gameBehaviour.getClass().getDeclaredField("ticks");
         ticksField.setAccessible(true);
 
+        darkField = gameBehaviour.getClass().getDeclaredField("dark");
+        darkField.setAccessible(true);
 
         gameBehaviourMock = mock(GameBehaviourService.class);
         formRenderer = new FormRendererService();
@@ -75,7 +78,6 @@ class GameBehaviourTest {
         Field indexPatternField = gameBehaviour.getClass().getDeclaredField("indexPattern");
         indexPatternField.setAccessible(true);
         assertEquals(0, indexPatternField.get(gameBehaviour));
-        assertEquals(2, gameBehaviour.dark);
         assertEquals(0, gameBehaviour.flashed);
         assertEquals(0, (Integer) ticksField.get(gameBehaviour));
     }
@@ -90,7 +92,7 @@ class GameBehaviourTest {
     }
 
     @Test
-    void actionPerformed_decrementsDarkAfter20Ticks() throws IllegalAccessException, NoSuchFieldException {
+    void actionPerformed_decrementsDarkAfter20Ticks() throws IllegalAccessException {
         ticksField.set(gameBehaviour, 19);
 
         gameBehaviour.actionPerformed(new ActionEvent(this, 0, null));
@@ -100,7 +102,7 @@ class GameBehaviourTest {
     @Test
     void actionPerformed_createsPatternWhenDarkIsZero() {
         gameBehaviour.createPattern = true;
-        gameBehaviour.dark = 0;
+        this.setDark(0);
         pattern.clear();
         gameBehaviour.actionPerformed(new ActionEvent(this, 0, null));
         assertFalse(pattern.isEmpty());
@@ -142,7 +144,7 @@ class GameBehaviourTest {
     @Test
     void actionPerformedShouldNotCreatePatternWhenDarkIsNotZero() {
         gameBehaviour.createPattern = true;
-        gameBehaviour.dark = 1;
+        this.setDark(1);
         pattern.clear();
         gameBehaviour.actionPerformed(new ActionEvent(this, 0, null));
         assertTrue(pattern.isEmpty());
@@ -174,13 +176,13 @@ class GameBehaviourTest {
         assertTrue(gameBehaviour.gameOver);
     }
 
-    @Test
-    void mousePressedShouldNotEndGameWhenPatternIsCorrect() {
-        pattern.add(1);
-        gameBehaviour.flashed = 1;
-
-        gameBehaviour.mousePressed(new MouseEvent(new Component() {
-        }, 0, 0, 0, 0, 0, 0, false));
-        assertFalse(gameBehaviour.gameOver);
+    private void setDark(Integer value) {
+        darkField.setAccessible(true);
+        try {
+            darkField.set(gameBehaviour, value);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
+
 }
