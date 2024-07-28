@@ -22,6 +22,12 @@ public class MainView extends JFrame {
      * Button to exit the game. When clicked, the game will close.
      */
     private final JButton exitGameButton;
+
+    /**
+     * Button to show the highscore. When clicked, the highscore will be shown.
+     */
+    private final JButton highscoreButton;
+
     /**
      * Constructor for MainView.
      * Initializes the frame with title, size, layout and buttons.
@@ -42,11 +48,13 @@ public class MainView extends JFrame {
         // Initialize Buttons
         startGameButton = new JButton("Start Game");
         exitGameButton = new JButton("Exit Game");
+        highscoreButton = new JButton("Highscore");
 
         // Create a panel for buttons
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(3, 1, 10, 10));
         buttonPanel.add(startGameButton);
+        buttonPanel.add(highscoreButton);
         buttonPanel.add(exitGameButton);
 
         // Add components to frame
@@ -61,5 +69,6 @@ public class MainView extends JFrame {
     public void setButtonActionListener(ActionListener listener) {
         startGameButton.addActionListener(listener);
         exitGameButton.addActionListener(listener);
+        highscoreButton.addActionListener(listener);
     }
 }

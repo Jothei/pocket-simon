@@ -50,6 +50,9 @@ public class MainModel {
         if (gameMode.equals("Start Game")) {
             serviceFactory.LoggingService().log("Game started Button clicked", Level.INFO, GameSettingsModel.class);
             this.gameSettingsController.startGUI();
+        } else if (gameMode.equals("Highscore")) {
+            serviceFactory.LoggingService().log("Highscore Button clicked", Level.INFO, GameSettingsModel.class);
+            serviceFactory.GameBehaviour().showHighscore();
         } else {
             serviceFactory.LoggingService().log("Exit Game", Level.WARN, GameSettingsModel.class, gameMode);
             serviceFactory.GameBehaviour().exitGame();

@@ -4,14 +4,14 @@ import ch.joth.games.pocketsimon.game.code.codeimplementation.*;
 
 /**
  * This class is a factory for creating instances of various services.
-  */
+ */
 public class ServiceFactory {
 
     /**
      * Default constructor for the ServiceFactory class.
      * It is used to create an instance of the ServiceFactory class.
      */
-    public ServiceFactory(){
+    public ServiceFactory() {
 
     }
 
@@ -20,6 +20,7 @@ public class ServiceFactory {
     /**
      * This method returns an instance of the AudioService.
      * If an instance does not already exist, it creates one.
+     *
      * @return An instance of the AudioService.
      */
     public AudioService AudioService() {
@@ -34,6 +35,7 @@ public class ServiceFactory {
     /**
      * This method returns an instance of the GameBehaviour.
      * If an instance does not already exist, it creates one.
+     *
      * @return An instance of the GameBehaviour.
      */
     public GameBehaviourService GameBehaviour() {
@@ -48,6 +50,7 @@ public class ServiceFactory {
     /**
      * This method returns an instance of the FormRenderer.
      * If an instance does not already exist, it creates one.
+     *
      * @return An instance of the FormRenderer.
      */
     public FormRendererService FormRenderer() {
@@ -62,6 +65,7 @@ public class ServiceFactory {
     /**
      * This method returns an instance of the LoggingService.
      * If an instance does not already exist, it creates one.
+     *
      * @return An instance of the LoggingService.
      */
     public LoggingService LoggingService() {
@@ -70,12 +74,14 @@ public class ServiceFactory {
         }
         return _loggingService;
     }
-     // Holds the instance of ConfigService
+
+    // Holds the instance of ConfigService
     private ConfigService _configService;
 
     /**
      * This method returns an instance of the ConfigService.
      * If an instance does not already exist, it creates one.
+     *
      * @return An instance of the ConfigService.
      */
     public ConfigService ConfigService() {
@@ -85,8 +91,10 @@ public class ServiceFactory {
         return _configService;
     }
 
-
-    public void reset(){
+    /**
+     * This method resets the instances of all services.
+     */
+    public void reset() {
         _audioService = null;
         _gameBehaviour = null;
         _formRenderer = null;

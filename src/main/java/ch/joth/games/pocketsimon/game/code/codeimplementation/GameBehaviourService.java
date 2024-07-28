@@ -1,5 +1,8 @@
 package ch.joth.games.pocketsimon.game.code.codeimplementation;
 
+import ch.joth.games.pocketsimon.game.HighscoreController;
+import ch.joth.games.pocketsimon.game.HighscoreModel;
+import ch.joth.games.pocketsimon.game.HighscoreView;
 import ch.joth.games.pocketsimon.game.code.*;
 import ch.joth.games.pocketsimon.game.code.codedefinition.IGameBehaviour;
 
@@ -83,6 +86,19 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         timer = new Timer(20, this);
         service = new ServiceFactory();
 
+    }
+
+    /**
+     * This method is used to get the instance of the GameBehaviour class. The View will be visible after calling this method.
+     */
+    public void showHighscore() {
+        HighscoreModel model = new HighscoreModel();
+        HighscoreView view = new HighscoreView();
+        model.addHighscore("Test 1");
+        model.addHighscore("Test 2");
+        model.addHighscore("Test 3");
+        new HighscoreController(model, view);
+        view.setVisible(true);
     }
 
     public void startGame(eSoundMode soundMode, eColorMode colorMode) {

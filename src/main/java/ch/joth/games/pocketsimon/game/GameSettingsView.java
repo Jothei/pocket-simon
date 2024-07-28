@@ -75,6 +75,12 @@ public class GameSettingsView extends JFrame {
         this.add(settingsPanel);
     }
 
+    /**
+     * Returns the JPanel for the game settings view.
+     * The panel contains components for selecting the color mode and sound mode.
+     *
+     * @return the JPanel for the game settings view
+     */
     public JPanel getPanel() {
         // Initialize Components
         JPanel settingsPanel = new JPanel();
