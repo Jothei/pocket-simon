@@ -3,6 +3,7 @@ package ch.joth.games.pocketsimon.game.code.codedefinition;
 import ch.joth.games.pocketsimon.game.code.eColorMode;
 import ch.joth.games.pocketsimon.game.code.eSoundMode;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -40,4 +41,9 @@ public interface IGameBehaviour {
      * Exits the game.
      */
     void exitGame();
+
+
+    void showHighscore();
+
+    void initHighscoreInsertDialog(JFrame parent, int points);
 }

@@ -33,6 +33,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * Instance of the ServiceFactory class used to access various services like audio and logging.
      */
     private final ServiceFactory service;
+    /**
+     * Instance of the Timer class used to handle the game ticks.
+     */
     private final Timer timer;
     /**
      * Instance of the FormRenderer class used to render the game GUI.
@@ -69,11 +72,22 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * A boolean indicating whether the game is over. If true, the game is over.
      */
-
     public boolean gameOver;
+    /**
+     * The sound mode of the game. It can be SOUND_ON, SOUND_OFF.
+     */
     private eSoundMode soundMode = eSoundMode.SOUND_ON;
+    /**
+     * The color mode of the game. It can be COLOR_ON, COLOR_OFF or Color_Audio_Only.
+     */
     private eColorMode colorMode = eColorMode.COLOR_ON;
+    /**
+     * The JFrame used to display the game GUI.
+     */
     private JFrame gameFrame;
+    /**
+     * The highscore entry dialog used to enter the player's name.
+     */
     private HighscoreEntryDialog dialog;
 
     /**
@@ -86,7 +100,6 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         gameBehaviour = this;
         timer = new Timer(20, this);
         service = new ServiceFactory();
-
     }
 
     /**
@@ -95,25 +108,41 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     public void showHighscore() {
         HighscoreView view = new HighscoreView();
         view.display();
-
     }
 
+    /**
+     * Initializes the highscore entry dialog with the given parent frame and points.
+     *
+     * @param parent the parent JFrame
+     * @param points the points to be displayed in the dialog
+     */
     public void initHighscoreInsertDialog(JFrame parent, int points) {
-
         dialog = new HighscoreEntryDialog(parent, points);
-        showHighsocreDialog();
+        showHighscoreDialog();
     }
 
-    private void showHighsocreDialog() {
+    /**
+     * Displays the highscore entry dialog.
+     */
+    private void showHighscoreDialog() {
         dialog.setVisible(true);
     }
 
+    /**
+     * Starts the game with the specified sound and color modes.
+     *
+     * @param soundMode the sound mode to be used
+     * @param colorMode the color mode to be used
+     */
     public void startGame(eSoundMode soundMode, eColorMode colorMode) {
         this.colorMode = colorMode;
         this.soundMode = soundMode;
         this.startGame();
     }
 
+    /**
+     * Exits the whole game.
+     */
     public void exitGame() {
         System.exit(0);
     }
@@ -136,7 +165,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     }
 
     /**
-     * This method starts the game by initializing the game variables.
+     * This method initializing the game variables before the game can start.
      */
     public void initGameVariables() {
         pattern = new ArrayList<>();
@@ -194,7 +223,6 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * @param g The Graphics2D object to paint on.
      */
     public void paint(Graphics2D g) {
-
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         addButtons(g);
         addLayout(g);
@@ -202,19 +230,22 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         String delimiterSymbol = service.ConfigService().getValue(eConfigValues.DELIMITER_Symbol);
         if (gameOver) {
             g.drawString(gameoverEmoji, WIDTH / 2 - 100, HEIGHT / 2 + 42);
-
         } else {
             g.drawString(indexPattern + delimiterSymbol + pattern.size(), WIDTH / 2 - 100, HEIGHT / 2 + 42);
         }
     }
 
+    /**
+     * Adds the buttons to the game GUI.
+     *
+     * @param g The Graphics2D object to paint on.
+     */
     private void addButtons(Graphics2D g) {
         if (flashed == 1) {
             this.setColor(Color.GREEN, g, true);
             playSound(eSoundFile.Green);
         } else {
             this.setColor(Color.GREEN, g, false);
-
         }
 
         g.fillRect(0, 0, WIDTH / 2, HEIGHT / 2);
@@ -222,10 +253,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (flashed == 2) {
             this.setColor(Color.RED, g, true);
             playSound(eSoundFile.Red);
-
         } else {
             this.setColor(Color.RED, g, false);
-
         }
 
         g.fillRect(WIDTH / 2, 0, WIDTH / 2, HEIGHT / 2);
@@ -233,7 +262,6 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (flashed == 3) {
             this.setColor(Color.ORANGE, g, true);
             playSound(eSoundFile.Yellow);
-
         } else {
             this.setColor(Color.ORANGE, g, false);
         }
@@ -243,12 +271,16 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (flashed == 4) {
             this.setColor(Color.BLUE, g, true);
             playSound(eSoundFile.Blue);
-
         } else {
             this.setColor(Color.BLUE, g, false);
         }
     }
 
+    /**
+     * Adds the layout to the game GUI.
+     *
+     * @param g The Graphics2D object to paint on.
+     */
     private static void addLayout(Graphics2D g) {
         g.fillRect(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
 
@@ -274,7 +306,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseClicked(MouseEvent e) {
-        //Add comment to prevent JavaDoc warning.
+        // Add comment to prevent JavaDoc warning.
     }
 
     /**
@@ -312,29 +344,21 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
                 flashed = 1;
                 ticks = 1;
                 playSound(eSoundFile.Green);
-
-
             } else if (FormRendererService.isRedButton(x, y)) {
                 service.LoggingService().log("Red button clicked", INFO, this.getClass());
-
                 flashed = 2;
                 ticks = 1;
                 playSound(eSoundFile.Red);
-
-
             } else if (FormRendererService.isYellowButton(x, y)) {
                 service.LoggingService().log("Yellow button clicked", INFO, this.getClass());
-
                 flashed = 3;
                 ticks = 1;
                 playSound(eSoundFile.Yellow);
-
             } else if (FormRendererService.isBlueButton(x, y)) {
                 service.LoggingService().log("Blue button clicked", INFO, this.getClass());
                 flashed = 4;
                 ticks = 1;
                 playSound(eSoundFile.Blue);
-
             }
 
             if (flashed != 0) {
@@ -351,11 +375,16 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             service.LoggingService().log("Restart Game after Game Over", INFO, this.getClass(), "flashed: " + flashed);
             initGameVariables();
             gameOver = false;
-
         }
-
     }
 
+    /**
+     * Sets the color for the game buttons.
+     *
+     * @param color   the color to be set
+     * @param g       the Graphics2D object to paint on
+     * @param flashed a boolean indicating whether the button is flashed
+     */
     void setColor(Color color, Graphics2D g, Boolean flashed) {
         if (this.colorMode == eColorMode.COLOR_ON) {
             if (flashed) {
@@ -374,11 +403,15 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         }
     }
 
+    /**
+     * Plays the specified sound file.
+     *
+     * @param soundFile the sound file to be played
+     */
     private void playSound(eSoundFile soundFile) {
         if (this.soundMode == eSoundMode.SOUND_ON || this.colorMode == eColorMode.Color_Audio_Only || soundFile == eSoundFile.Fail) {
             service.AudioService().playSound(soundFile);
         }
-
     }
 
     /**
@@ -386,7 +419,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        //Added comment to prevent JavaDoc warning.
+        // Added comment to prevent JavaDoc warning.
     }
 
     /**
@@ -394,7 +427,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-        //Added comment to prevent JavaDoc warning.
+        // Added comment to prevent JavaDoc warning.
     }
 
     /**
@@ -402,9 +435,6 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseExited(MouseEvent e) {
-        //Added comment to prevent JavaDoc warning.
-
+        // Added comment to prevent JavaDoc warning.
     }
-
-
 }

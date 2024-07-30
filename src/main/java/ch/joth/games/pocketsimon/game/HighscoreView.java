@@ -6,22 +6,26 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * HighscoreView is a class that represents the leaderboard view in the Pocket Simon game.
+ * It creates a JFrame to display the highscore table.
+ */
 public class HighscoreView {
 
     private final JFrame frame;
 
-
+    /**
+     * Constructs a new HighscoreView.
+     * Initializes the JFrame and sets up the highscore table.
+     */
     public HighscoreView() {
-
         frame = new JFrame("Leaderboard");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(400, 300);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
-
         JPanel panel = new JPanel();
-
         panel.setLayout(new BorderLayout());
 
         DefaultTableModel tableModel = new DefaultTableModel();
@@ -44,19 +48,22 @@ public class HighscoreView {
         frame.add(scrollPane, BorderLayout.CENTER);
 
         this.display();
-
     }
 
-
+    /**
+     * Displays the highscore view by making the JFrame visible.
+     * Also initializes the HighscoreController.
+     */
     public void display() {
-
         frame.setVisible(true);
-
         new HighscoreController(new HighscoreModel(), this);
-
     }
 
-
+    /**
+     * Retrieves the list of highscore entries.
+     *
+     * @return a list of HighscoreEntry objects
+     */
     public List<HighscoreEntry> getRows() {
         HighscoreModel model = new HighscoreModel();
         return model.getEntries();
