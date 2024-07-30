@@ -115,13 +115,13 @@ class GameBehaviourTest {
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
     void mousePressed_resetsGameWhenGameOver(Boolean gameOver) {
-        gameBehaviour.gameOver = gameOver;
+        gameBehaviour.setGameOver(gameOver);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
         if (!gameOver) {
-            assertFalse(gameBehaviour.gameOver);
+            assertFalse(gameBehaviour.isGameOver());
         } else {
-            assertFalse(gameBehaviour.gameOver);
+            assertFalse(gameBehaviour.isGameOver());
         }
     }
 
@@ -133,7 +133,7 @@ class GameBehaviourTest {
         setFlashed(1);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertFalse(gameBehaviour.gameOver);
+        assertFalse(gameBehaviour.isGameOver());
     }
 
     @Test
@@ -157,18 +157,19 @@ class GameBehaviourTest {
 
     @Test
     void mousePressedShouldResetGameWhenGameOver() {
-        gameBehaviour.gameOver = true;
+
+        gameBehaviour.setGameOver(true);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertFalse(gameBehaviour.gameOver);
+        assertFalse(gameBehaviour.isGameOver());
     }
 
     @Test
     void mousePressedShouldNotResetGameWhenNotGameOver() {
-        gameBehaviour.gameOver = false;
+        gameBehaviour.setGameOver(false);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertFalse(gameBehaviour.gameOver);
+        assertFalse(gameBehaviour.isGameOver());
     }
 
     @Test
@@ -180,7 +181,7 @@ class GameBehaviourTest {
         doNothing().when(gameSpy).initHighscoreInsertDialog(any(), anyInt());
         gameSpy.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertTrue(gameSpy.gameOver);
+        assertTrue(gameSpy.isGameOver());
     }
 
     private void setDark(Integer value) {

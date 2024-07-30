@@ -15,7 +15,7 @@ public enum eConfigValues {
     /**
      * Delimiter Symbol config value.
      */
-    DELIMITER_Symbol,
+    DELIMITER_SYMBOL,
     /**
      * Menu Width config value.
      */

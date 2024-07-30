@@ -29,6 +29,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * Singleton instance of the GameBehaviour class.
      */
     static GameBehaviourService gameBehaviour;
+
+
     /**
      * Instance of the ServiceFactory class used to access various services like audio and logging.
      */
@@ -72,7 +74,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * A boolean indicating whether the game is over. If true, the game is over.
      */
-    public boolean gameOver;
+    private boolean gameOver;
     /**
      * The sound mode of the game. It can be SOUND_ON, SOUND_OFF.
      */
@@ -227,7 +229,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         addButtons(g);
         addLayout(g);
         String gameoverEmoji = service.ConfigService().getValue(eConfigValues.LOOSE_EMOJI);
-        String delimiterSymbol = service.ConfigService().getValue(eConfigValues.DELIMITER_Symbol);
+        String delimiterSymbol = service.ConfigService().getValue(eConfigValues.DELIMITER_SYMBOL);
         if (gameOver) {
             g.drawString(gameoverEmoji, WIDTH / 2 - 100, HEIGHT / 2 + 42);
         } else {
@@ -392,7 +394,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             } else {
                 g.setColor(color.darker());
             }
-        } else if (this.colorMode == eColorMode.Color_Audio_Only) {
+        } else if (this.colorMode == eColorMode.COLOR_AUDIO_ONLY) {
             g.setColor(color);
         } else {
             if (flashed) {
@@ -409,7 +411,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * @param soundFile the sound file to be played
      */
     private void playSound(eSoundFile soundFile) {
-        if (this.soundMode == eSoundMode.SOUND_ON || this.colorMode == eColorMode.Color_Audio_Only || soundFile == eSoundFile.FAIL) {
+        if (this.soundMode == eSoundMode.SOUND_ON || this.colorMode == eColorMode.COLOR_AUDIO_ONLY || soundFile == eSoundFile.FAIL) {
             service.AudioService().playSound(soundFile);
         }
     }
@@ -436,5 +438,13 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     @Override
     public void mouseExited(MouseEvent e) {
         // Added comment to prevent JavaDoc warning.
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 }

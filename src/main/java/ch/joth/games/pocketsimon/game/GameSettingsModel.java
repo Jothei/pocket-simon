@@ -62,7 +62,7 @@ public class GameSettingsModel {
         if (Objects.equals(selectedColorMode, "Single Color Mode")) {
             colorMode = eColorMode.COLOR_OFF;
         } else if (Objects.equals(selectedColorMode, "Audio only Mode")) {
-            colorMode = eColorMode.Color_Audio_Only;
+            colorMode = eColorMode.COLOR_AUDIO_ONLY;
         }
 
         if ((selectedColorMode != null && selectedSoundMode != null)) {

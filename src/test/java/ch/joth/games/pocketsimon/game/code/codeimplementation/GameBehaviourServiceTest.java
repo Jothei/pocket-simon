@@ -90,7 +90,7 @@ class GameBehaviourServiceTest {
     void mousePressed() {
         MouseEvent e = mock(MouseEvent.class);
         this.setPattern(false);
-        gameBehaviourService.gameOver = true;
+        gameBehaviourService.setGameOver(true);
 
 
         when(e.getX()).thenReturn(1);
@@ -99,7 +99,7 @@ class GameBehaviourServiceTest {
 
         verify(e, times(1)).getX();
         verify(e, times(1)).getY();
-        assertFalse(gameBehaviourService.gameOver);
+        assertFalse(gameBehaviourService.isGameOver());
 
 
     }
@@ -108,7 +108,7 @@ class GameBehaviourServiceTest {
     void mousePressedGreenButton() {
         MouseEvent e = mock(MouseEvent.class);
         this.setPattern(false);
-        gameBehaviourService.gameOver = false;
+        gameBehaviourService.setGameOver(false);
         pattern = new ArrayList<>(1);
         this.setFlashed(0);
         when(e.getX()).thenReturn(1);
