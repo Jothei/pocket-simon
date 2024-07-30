@@ -2,8 +2,6 @@ package ch.joth.games.pocketsimon.game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * HighscoreEntryDialog is a class that represents a dialog for adding a highscore entry.
@@ -62,34 +60,12 @@ public class HighscoreEntryDialog extends JDialog {
         panel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         JButton btnAdd = new JButton("Add");
-
-        btnAdd.addActionListener(new ActionListener() {
-            /**
-             * Invoked when the add button is clicked.
-             * Adds a new highscore entry to the model and disposes the dialog.
-             *
-             * @param e the action event
-             */
-            public void actionPerformed(ActionEvent e) {
-
-                new HighscoreModel().addEntry(new HighscoreEntry(getNameField(), getScore()));
-
-                dispose();
-            }
+        btnAdd.addActionListener(e -> {
+            new HighscoreModel().addEntry(new HighscoreEntry(getNameField(), getScore()));
+            dispose();
         });
-
         JButton btnCancel = new JButton("Cancel");
-        btnCancel.addActionListener(new ActionListener() {
-            /**
-             * Invoked when the cancel button is clicked.
-             * Disposes the dialog.
-             *
-             * @param e the action event
-             */
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
+        btnCancel.addActionListener(e -> dispose());
 
         JPanel bp = new JPanel();
         bp.add(btnAdd);

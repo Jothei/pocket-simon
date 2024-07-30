@@ -243,7 +243,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     private void addButtons(Graphics2D g) {
         if (flashed == 1) {
             this.setColor(Color.GREEN, g, true);
-            playSound(eSoundFile.Green);
+            playSound(eSoundFile.GREEN);
         } else {
             this.setColor(Color.GREEN, g, false);
         }
@@ -252,7 +252,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
         if (flashed == 2) {
             this.setColor(Color.RED, g, true);
-            playSound(eSoundFile.Red);
+            playSound(eSoundFile.RED);
         } else {
             this.setColor(Color.RED, g, false);
         }
@@ -261,7 +261,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
         if (flashed == 3) {
             this.setColor(Color.ORANGE, g, true);
-            playSound(eSoundFile.Yellow);
+            playSound(eSoundFile.YELLOW);
         } else {
             this.setColor(Color.ORANGE, g, false);
         }
@@ -270,7 +270,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
         if (flashed == 4) {
             this.setColor(Color.BLUE, g, true);
-            playSound(eSoundFile.Blue);
+            playSound(eSoundFile.BLUE);
         } else {
             this.setColor(Color.BLUE, g, false);
         }
@@ -343,29 +343,29 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
                 service.LoggingService().log("Green button clicked", INFO, this.getClass());
                 flashed = 1;
                 ticks = 1;
-                playSound(eSoundFile.Green);
+                playSound(eSoundFile.GREEN);
             } else if (FormRendererService.isRedButton(x, y)) {
                 service.LoggingService().log("Red button clicked", INFO, this.getClass());
                 flashed = 2;
                 ticks = 1;
-                playSound(eSoundFile.Red);
+                playSound(eSoundFile.RED);
             } else if (FormRendererService.isYellowButton(x, y)) {
                 service.LoggingService().log("Yellow button clicked", INFO, this.getClass());
                 flashed = 3;
                 ticks = 1;
-                playSound(eSoundFile.Yellow);
+                playSound(eSoundFile.YELLOW);
             } else if (FormRendererService.isBlueButton(x, y)) {
                 service.LoggingService().log("Blue button clicked", INFO, this.getClass());
                 flashed = 4;
                 ticks = 1;
-                playSound(eSoundFile.Blue);
+                playSound(eSoundFile.BLUE);
             }
 
             if (flashed != 0) {
                 if (pattern.get(indexPattern) == flashed) {
                     indexPattern++;
                 } else {
-                    playSound(eSoundFile.Fail);
+                    playSound(eSoundFile.FAIL);
                     service.LoggingService().log("Game Over", WARN, this.getClass(), "flashed: " + flashed);
                     initHighscoreInsertDialog(this.gameFrame, pattern.size());
                     gameOver = true;
@@ -409,7 +409,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * @param soundFile the sound file to be played
      */
     private void playSound(eSoundFile soundFile) {
-        if (this.soundMode == eSoundMode.SOUND_ON || this.colorMode == eColorMode.Color_Audio_Only || soundFile == eSoundFile.Fail) {
+        if (this.soundMode == eSoundMode.SOUND_ON || this.colorMode == eColorMode.Color_Audio_Only || soundFile == eSoundFile.FAIL) {
             service.AudioService().playSound(soundFile);
         }
     }

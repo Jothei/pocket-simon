@@ -6,12 +6,13 @@ import ch.joth.games.pocketsimon.game.code.eConfigValues;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 /**
  * GameSettingsView class extends JFrame and represents the game settings view.
  * It allows the user to select the color mode and sound mode for the game.
  */
-public class GameSettingsView extends JFrame {
+public class GameSettingsView extends JFrame implements Serializable {
     /**
      * ServiceFactory instance used to access various services.
      */
@@ -67,7 +68,7 @@ public class GameSettingsView extends JFrame {
     public GameSettingsView() {
         this.setTitle(serviceFactory.ConfigService().getValue(eConfigValues.GAME_TITLE) + " - Game Setup");
         this.setSize(Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_WIDTH)), Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_HEIGHT)));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
 

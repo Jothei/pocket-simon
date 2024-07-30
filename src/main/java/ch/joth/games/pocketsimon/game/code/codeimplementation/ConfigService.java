@@ -22,7 +22,9 @@ public class ConfigService implements IConfigService {
      * It is used to create an instance of the ConfigService class.
      */
     public ConfigService() {
+        // Comment to prevent Warnings from JavaDoc generation
     }
+
     /**
      * This method returns a BufferedReader for the config.json file located in the resources folder.
      * If the file is not found, it logs an error and throws an IllegalArgumentException.

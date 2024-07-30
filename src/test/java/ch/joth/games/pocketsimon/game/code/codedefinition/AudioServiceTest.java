@@ -19,10 +19,10 @@ class AudioServiceTest {
 
     @Test
     void playSoundFileTest() {
-        assertDoesNotThrow( () -> audioService.playSound(eSoundFile.Green));
-        assertDoesNotThrow( () -> audioService.playSound(eSoundFile.Yellow));
-        assertDoesNotThrow( () -> audioService.playSound(eSoundFile.Blue));
-        assertDoesNotThrow( () -> audioService.playSound(eSoundFile.Red));
+        assertDoesNotThrow(() -> audioService.playSound(eSoundFile.GREEN));
+        assertDoesNotThrow(() -> audioService.playSound(eSoundFile.YELLOW));
+        assertDoesNotThrow(() -> audioService.playSound(eSoundFile.BLUE));
+        assertDoesNotThrow(() -> audioService.playSound(eSoundFile.RED));
 
     }
 }

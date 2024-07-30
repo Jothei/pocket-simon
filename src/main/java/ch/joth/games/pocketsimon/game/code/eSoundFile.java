@@ -7,21 +7,21 @@ public enum eSoundFile {
     /**
      * Red sound file.
      */
-    Red,
+    RED,
     /**
      * Blue sound file.
      */
-    Blue,
+    BLUE,
     /**
      * Green sound file.
      */
-    Green,
+    GREEN,
     /**
      * Yellow sound file.
      */
-    Yellow,
+    YELLOW,
     /**
      * Fail sound file.
      */
-    Fail
+    FAIL
 }

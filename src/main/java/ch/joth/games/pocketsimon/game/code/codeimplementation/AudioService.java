@@ -18,6 +18,7 @@ public class AudioService implements IAudioService {
      * It is used to create an instance of the AudioService class.
      */
     public AudioService() {
+        // Comment to prevent Warnings from JavaDoc generation
     }
 
     /**
@@ -62,19 +63,19 @@ public class AudioService implements IAudioService {
      */
     public void playSound(eSoundFile soundFile) {
         switch (soundFile) {
-            case Red:
+            case RED:
                 playSound("red.wav");
                 break;
-            case Blue:
+            case BLUE:
                 playSound("blue.wav");
                 break;
-            case Green:
+            case GREEN:
                 playSound("green.wav");
                 break;
-            case Yellow:
+            case YELLOW:
                 playSound("yellow.wav");
                 break;
-            case Fail:
+            case FAIL:
                 playSound("fail.wav");
                 break;
 

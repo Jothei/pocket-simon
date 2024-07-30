@@ -18,6 +18,7 @@ public class GameSettingsModel {
      * Default constructor for GameSettingsModel.
      */
     public GameSettingsModel() {
+        // To prevent JavaDoc Issues
     }
 
     /**
@@ -43,10 +44,10 @@ public class GameSettingsModel {
      * Handles the menu actions based on the selected sound and color modes.
      * Clears the selections, disposes the view, and starts the game with the selected modes.
      *
-     * @param service a ServiceFactory instance
+     * @param service        a ServiceFactory instance
      * @param soundModeGroup a ButtonGroup instance for sound mode
      * @param colorModeGroup a ButtonGroup instance for color mode
-     * @param view a GameSettingsView instance
+     * @param view           a GameSettingsView instance
      */
     void setMenuAction(ServiceFactory service, ButtonGroup soundModeGroup, ButtonGroup colorModeGroup, GameSettingsView view) {
         eSoundMode soundMode = eSoundMode.SOUND_ON;
