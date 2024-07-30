@@ -1,38 +1,83 @@
 package ch.joth.games.pocketsimon.game;
 
+import ch.joth.games.pocketsimon.game.code.ServiceFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.Level;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-/**
- * HighscoreModel is a model class that manages a list of highscores.
- * It provides methods to retrieve and add highscores.
- */
 public class HighscoreModel {
-    private List<String> highscores;
 
-    /**
-     * Constructs a new HighscoreModel.
-     * Initializes the highscores list.
-     */
+    private List<HighscoreEntry> entries;
+
+    private static final String FILE_PATH = "leaderboard.json";
+
+    private final ObjectMapper mapper;
+
     public HighscoreModel() {
-        highscores = new ArrayList<>();
+
+        entries = new ArrayList<>();
+
+        mapper = new ObjectMapper();
+
+        loadFromFile();
+
     }
 
-    /**
-     * Retrieves the list of highscores.
-     *
-     * @return a list of highscore strings
-     */
-    public List<String> getHighscores() {
-        return highscores;
+    public void addEntry(HighscoreEntry entry) {
+
+        entries.add(entry);
+
+        entries.sort(Comparator.comparingInt(HighscoreEntry::getScore).reversed());
+
+        saveToFile();
+
     }
 
-    /**
-     * Adds a new highscore to the list.
-     *
-     * @param highscore the highscore string to be added
-     */
-    public void addHighscore(String highscore) {
-        highscores.add(highscore);
+    public List<HighscoreEntry> getEntries() {
+
+        return entries;
+
     }
+
+    private void saveToFile() {
+
+        try {
+
+            mapper.writeValue(new File(FILE_PATH), entries);
+
+        } catch (IOException e) {
+
+            new ServiceFactory().LoggingService().log(e.getMessage(), Level.ERROR, HighscoreModel.class);
+
+        }
+
+    }
+
+    private void loadFromFile() {
+
+        try {
+
+            File file = new File(FILE_PATH);
+
+            if (file.exists()) {
+
+                entries = mapper.readValue(file, new TypeReference<>() {
+
+                });
+
+            }
+
+        } catch (IOException e) {
+            new ServiceFactory().LoggingService().log(e.getMessage(), Level.ERROR, HighscoreModel.class);
+
+        }
+
+    }
+
 }

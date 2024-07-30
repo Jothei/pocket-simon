@@ -62,12 +62,7 @@ class GameBehaviourTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-            "SOUND_ON, COLOR_ON",
-            "SOUND_OFF, COLOR_OFF",
-            "SOUND_ON, COLOR_OFF",
-            "SOUND_OFF, COLOR_ON"
-    })
+    @CsvSource({"SOUND_ON, COLOR_ON", "SOUND_OFF, COLOR_OFF", "SOUND_ON, COLOR_OFF", "SOUND_OFF, COLOR_ON"})
     void testStartGame(eSoundMode soundMode, eColorMode colorMode) {
         GameBehaviourService gameSpy = spy(gameBehaviour);
         doNothing().when(gameSpy).startGame();
@@ -181,9 +176,11 @@ class GameBehaviourTest {
         pattern.add(1);
         setFlashed(2);
         this.setPattern(false);
-        gameBehaviour.mousePressed(new MouseEvent(new Component() {
+        GameBehaviourService gameSpy = spy(gameBehaviour);
+        doNothing().when(gameSpy).initHighscoreInsertDialog(any(), anyInt());
+        gameSpy.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
-        assertTrue(gameBehaviour.gameOver);
+        assertTrue(gameSpy.gameOver);
     }
 
     private void setDark(Integer value) {

@@ -44,6 +44,7 @@ public class MainView extends JFrame {
         this.setLayout(new BorderLayout());
         // Center the frame
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
 
         // Initialize Buttons
         startGameButton = new JButton("Start Game");

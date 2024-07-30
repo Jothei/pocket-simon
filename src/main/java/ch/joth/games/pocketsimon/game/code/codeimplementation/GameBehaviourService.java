@@ -1,7 +1,6 @@
 package ch.joth.games.pocketsimon.game.code.codeimplementation;
 
-import ch.joth.games.pocketsimon.game.HighscoreController;
-import ch.joth.games.pocketsimon.game.HighscoreModel;
+import ch.joth.games.pocketsimon.game.HighscoreEntryDialog;
 import ch.joth.games.pocketsimon.game.HighscoreView;
 import ch.joth.games.pocketsimon.game.code.*;
 import ch.joth.games.pocketsimon.game.code.codedefinition.IGameBehaviour;
@@ -74,6 +73,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     public boolean gameOver;
     private eSoundMode soundMode = eSoundMode.SOUND_ON;
     private eColorMode colorMode = eColorMode.COLOR_ON;
+    private JFrame gameFrame;
+    private HighscoreEntryDialog dialog;
 
     /**
      * Constructor for the GameBehaviour class.
@@ -92,13 +93,19 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * This method is used to get the instance of the GameBehaviour class. The View will be visible after calling this method.
      */
     public void showHighscore() {
-        HighscoreModel model = new HighscoreModel();
         HighscoreView view = new HighscoreView();
-        model.addHighscore("Test 1");
-        model.addHighscore("Test 2");
-        model.addHighscore("Test 3");
-        new HighscoreController(model, view);
-        view.setVisible(true);
+        view.display();
+
+    }
+
+    public void initHighscoreInsertDialog(JFrame parent, int points) {
+
+        dialog = new HighscoreEntryDialog(parent, points);
+        showHighsocreDialog();
+    }
+
+    private void showHighsocreDialog() {
+        dialog.setVisible(true);
     }
 
     public void startGame(eSoundMode soundMode, eColorMode colorMode) {
@@ -116,14 +123,14 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public void startGame() {
         // Start the game
-        JFrame frame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
-        frame.setSize(WIDTH + 8, HEIGHT + 30);
-        frame.setVisible(true);
-        frame.addMouseListener(this);
-        frame.setResizable(false);
-        frame.add(this.renderer);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
+        this.gameFrame.setSize(WIDTH + 8, HEIGHT + 30);
+        this.gameFrame.setVisible(true);
+        this.gameFrame.addMouseListener(this);
+        this.gameFrame.setResizable(false);
+        this.gameFrame.add(this.renderer);
+        this.gameFrame.setLocationRelativeTo(null);
+        this.gameFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         initGameVariables();
         timer.start();
     }
@@ -336,6 +343,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
                 } else {
                     playSound(eSoundFile.Fail);
                     service.LoggingService().log("Game Over", WARN, this.getClass(), "flashed: " + flashed);
+                    initHighscoreInsertDialog(this.gameFrame, pattern.size());
                     gameOver = true;
                 }
             }
@@ -343,6 +351,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             service.LoggingService().log("Restart Game after Game Over", INFO, this.getClass(), "flashed: " + flashed);
             initGameVariables();
             gameOver = false;
+
         }
 
     }
@@ -377,7 +386,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseReleased(MouseEvent e) {
-        //Add comment to prevent JavaDoc warning.
+        //Added comment to prevent JavaDoc warning.
     }
 
     /**
@@ -385,7 +394,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseEntered(MouseEvent e) {
-        //Add comment to prevent JavaDoc warning.
+        //Added comment to prevent JavaDoc warning.
     }
 
     /**
@@ -393,7 +402,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mouseExited(MouseEvent e) {
-        //Add comment to prevent JavaDoc warning.
+        //Added comment to prevent JavaDoc warning.
 
     }
 

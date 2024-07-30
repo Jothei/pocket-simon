@@ -1,60 +1,64 @@
 package ch.joth.games.pocketsimon.game;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.List;
 
-/**
- * HighscoreView is a JFrame that displays a highscore board.
- * It allows users to view and add new highscores.
- */
-public class HighscoreView extends JFrame {
-    /**
-     * The list model for the highscore list.
-     */
-    private DefaultListModel<String> listModel;
-    /**
-     * Show a List of Highscores.
-     */
-    private JList<String> highscoreList;
+public class HighscoreView {
 
-    /**
-     * Constructs a new HighscoreView.
-     * Initializes the UI components and sets up the layout.
-     */
+    private final JFrame frame;
+
+
     public HighscoreView() {
-        setTitle("Highscore Board");
-        setSize(300, 400);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
 
-        listModel = new DefaultListModel<>();
-        highscoreList = new JList<>(listModel);
+        frame = new JFrame("Leaderboard");
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setSize(400, 300);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
 
-        add(new JScrollPane(highscoreList), BorderLayout.CENTER);
-        JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new BorderLayout());
-        add(inputPanel, BorderLayout.SOUTH);
-    }
 
-    /**
-     * Sets the list of highscores to be displayed.
-     *
-     * @param highscores a list of highscore strings
-     */
-    public void setHighscores(List<String> highscores) {
-        listModel.clear();
-        for (String highscore : highscores) {
-            listModel.addElement(highscore);
+        JPanel panel = new JPanel();
+
+        panel.setLayout(new BorderLayout());
+
+        DefaultTableModel tableModel = new DefaultTableModel();
+        JTable table = new JTable(tableModel);
+        table.setEnabled(false);
+
+        tableModel.addColumn("Name");
+        tableModel.addColumn("Score");
+        tableModel.addColumn("Date");
+        for (HighscoreEntry entry : this.getRows()) {
+            tableModel.addRow(new Object[]{entry.getName(), entry.getScore(), entry.getDate()});
         }
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+        table.setRowSorter(sorter);
+        sorter.setSortKeys(List.of(new RowSorter.SortKey(1, SortOrder.DESCENDING)));
+        sorter.sort();
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        frame.add(scrollPane, BorderLayout.CENTER);
+
+        this.display();
+
     }
 
-    /**
-     * Gets the new highscore entered by the user.
-     *
-     * @return the new highscore as a string
-     */
+
+    public void display() {
+
+        frame.setVisible(true);
+
+        new HighscoreController(new HighscoreModel(), this);
+
+    }
 
 
+    public List<HighscoreEntry> getRows() {
+        HighscoreModel model = new HighscoreModel();
+        return model.getEntries();
+    }
 }
