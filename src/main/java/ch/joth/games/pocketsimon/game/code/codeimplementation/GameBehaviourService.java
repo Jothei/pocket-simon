@@ -99,7 +99,6 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public GameBehaviourService() {
         renderer = new FormRendererService();
-        gameBehaviour = this;
         timer = new Timer(20, this);
         service = new ServiceFactory();
     }

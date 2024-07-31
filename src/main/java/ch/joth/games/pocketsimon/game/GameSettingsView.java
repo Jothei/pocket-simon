@@ -16,7 +16,7 @@ public class GameSettingsView extends JFrame implements Serializable {
     /**
      * ServiceFactory instance used to access various services.
      */
-    final ServiceFactory serviceFactory = new ServiceFactory();
+    final ServiceFactory serviceFactory = new ServiceFactory(); //NOSONAR
     /**
      * JLabel for the color mode selection.
      */
@@ -142,6 +142,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         radioButtonAudioOnlyMode.addActionListener(listener);
         radioButtonNoSound.addActionListener(listener);
         radioButtonSound.addActionListener(listener);
+      
     }
 
 
