@@ -31,7 +31,7 @@ public class HighscoreController {
      * Updates the view with the highscore entries from the model.
      * Constructs a string representation of the highscore entries and updates the view.
      */
-    private void updateView() {
+    void updateView() {
         var sb = new StringBuilder();
         for (HighscoreEntry entry : model.getEntries()) {
             sb.append(entry.getName()).append(": ").append(entry.getScore()).append("\t").append(entry.getDate()).append("\n");

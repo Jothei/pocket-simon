@@ -47,7 +47,7 @@ public class HighscoreView {
         JScrollPane scrollPane = new JScrollPane(table);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        this.display();
+         
     }
 
     /**
