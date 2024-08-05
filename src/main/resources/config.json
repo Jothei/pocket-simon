@@ -1,7 +1,7 @@
 {
   "LOOSE_EMOJI": ":C",
   "GAME_TITLE": "Pocket Simon",
-  "DELIMITER_Symbol": ":",
+  "DELIMITER_SYMBOL": ":",
   "MENU_WIDTH": "600",
   "MENU_HEIGHT": "400"
 }
