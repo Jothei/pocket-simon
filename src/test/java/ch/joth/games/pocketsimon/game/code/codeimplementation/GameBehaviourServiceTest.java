@@ -3,16 +3,19 @@ package ch.joth.games.pocketsimon.game.code.codeimplementation;
 import ch.joth.games.pocketsimon.game.code.ServiceFactory;
 import ch.joth.games.pocketsimon.game.code.eColorMode;
 import ch.joth.games.pocketsimon.game.code.eSoundMode;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,25 +28,21 @@ class GameBehaviourServiceTest {
     ArrayList<Integer> pattern;
     Field createPatternField;
     Field flashedField;
+    Field frameField;
+
     int ticks;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
         gameBehaviourService = new GameBehaviourService();
         gameMock = spy(gameBehaviourService);
-
         service = new ServiceFactory();
+
+
         serviceMock = mock(service.getClass());
         when(serviceMock.ConfigService()).thenReturn(new ConfigService());
         when(serviceMock.LoggingService()).thenReturn(new LoggingService());
 
-        Field factory = gameBehaviourService.getClass().getDeclaredField("service");
-        factory.setAccessible(true);
-        factory.set(gameBehaviourService, serviceMock);
-
-        Field patternField = gameBehaviourService.getClass().getDeclaredField("pattern");
-        patternField.setAccessible(true);
-        pattern = (ArrayList<Integer>) patternField.get(gameBehaviourService);
 
         Field ticksField = gameBehaviourService.getClass().getDeclaredField("ticks");
         ticksField.setAccessible(true);
@@ -54,6 +53,9 @@ class GameBehaviourServiceTest {
 
         createPatternField = gameBehaviourService.getClass().getDeclaredField("createPattern");
         createPatternField.setAccessible(true);
+
+        frameField = gameBehaviourService.getClass().getDeclaredField("gameFrame");
+        frameField.setAccessible(true);
 
     }
 
@@ -70,21 +72,43 @@ class GameBehaviourServiceTest {
 
     }
 
+
     @Test
-    void startGame() throws NoSuchFieldException, IllegalAccessException {
+    void startGameWithConstructor2() throws NoSuchFieldException, IllegalAccessException {
         Field soundMode = gameMock.getClass().getDeclaredField("soundMode");
         soundMode.setAccessible(true);
         Field colorMode = gameMock.getClass().getDeclaredField("colorMode");
         colorMode.setAccessible(true);
         doNothing().when(gameMock).startGame();
+        gameMock.startGame(eSoundMode.SOUND_ON, eColorMode.COLOR_OFF);
+        assertEquals(eSoundMode.SOUND_ON, soundMode.get(gameMock));
+        assertEquals(eColorMode.COLOR_OFF, colorMode.get(gameMock));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideEnums")
+    void startGame(eColorMode color, eSoundMode sound) throws NoSuchFieldException, IllegalAccessException {
+        Field soundMode = gameMock.getClass().getDeclaredField("soundMode");
+        soundMode.setAccessible(true);
+        soundMode.set(gameMock, sound);
+        Field colorMode = gameMock.getClass().getDeclaredField("colorMode");
+        colorMode.setAccessible(true);
+        colorMode.set(gameMock, color);
+        doNothing().when(gameMock).actionPerformed(any());
+        doNothing().when(gameMock).initGameVariables();
 
         gameMock.startGame();
-        Assertions.assertNotNull(GameBehaviourService.gameBehaviour);
-        assertEquals(eSoundMode.SOUND_ON, soundMode.get(gameMock));
-        assertNotEquals(eColorMode.COLOR_OFF, colorMode.get(gameMock));
+
+
+        assertNotNull(GameBehaviourService.gameBehaviour);
+        assertEquals(sound, soundMode.get(gameMock));
+        assertEquals(color, colorMode.get(gameMock));
 
     }
 
+    static Stream<Arguments> provideEnums() {
+        return Arrays.stream(eColorMode.values()).flatMap(color -> Arrays.stream(eSoundMode.values()).map(sound -> Arguments.of(color, sound)));
+    }
 
     @Test
     void mousePressed() {
@@ -145,6 +169,7 @@ class GameBehaviourServiceTest {
         }
 
     }
+
 
     private void setPattern(boolean value) {
         try {

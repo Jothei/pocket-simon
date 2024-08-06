@@ -154,17 +154,25 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public void startGame() {
         // Start the game
-        this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
-        this.gameFrame.setSize(WIDTH + 8, HEIGHT + 30);
-        this.gameFrame.setVisible(true);
-        this.gameFrame.addMouseListener(this);
-        this.gameFrame.setResizable(false);
-        this.gameFrame.add(this.renderer);
-        this.gameFrame.setLocationRelativeTo(null);
-        this.gameFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        if (!GraphicsEnvironment.isHeadless()) {
+            this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
+            this.gameFrame.setSize(WIDTH + 8, HEIGHT + 30);
+
+            this.gameFrame.addMouseListener(this);
+            this.gameFrame.setResizable(false);
+            this.gameFrame.setLocationRelativeTo(null);
+            this.gameFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+            this.gameFrame.setVisible(false);
+            this.gameFrame.setEnabled(false);
+            timer.start();
+        } else {
+            // Handle headless environment initialization
+            new ServiceFactory().LoggingService().log("Headless environment detected", WARN, this.getClass());
+        }
         initGameVariables();
-        timer.start();
     }
+
 
     /**
      * This method initializing the game variables before the game can start.
