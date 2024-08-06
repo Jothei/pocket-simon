@@ -3,6 +3,7 @@ package ch.joth.games.pocketsimon.game.code.codeimplementation;
 import ch.joth.games.pocketsimon.game.code.ServiceFactory;
 import ch.joth.games.pocketsimon.game.code.eColorMode;
 import ch.joth.games.pocketsimon.game.code.eSoundMode;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -64,7 +65,6 @@ class GameBehaviourServiceTest {
         colorMode.setAccessible(true);
         doNothing().when(gameMock).startGame();
         gameMock.startGame(eSoundMode.SOUND_OFF, eColorMode.COLOR_ON);
-
         assertEquals(eSoundMode.SOUND_OFF, soundMode.get(gameMock));
         assertEquals(eColorMode.COLOR_ON, colorMode.get(gameMock));
 
@@ -79,7 +79,7 @@ class GameBehaviourServiceTest {
         doNothing().when(gameMock).startGame();
 
         gameMock.startGame();
-
+        Assertions.assertNotNull(GameBehaviourService.gameBehaviour);
         assertEquals(eSoundMode.SOUND_ON, soundMode.get(gameMock));
         assertNotEquals(eColorMode.COLOR_OFF, colorMode.get(gameMock));
 
