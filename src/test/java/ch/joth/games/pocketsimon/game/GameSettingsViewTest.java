@@ -25,7 +25,7 @@ class GameSettingsViewTest {
     void getPanel() {
         view.getPanel();
 
-        assertEquals(3, view.buttonGroupColorMode.getButtonCount());
+        assertEquals(4, view.buttonGroupColorMode.getButtonCount());
         assertEquals(2, view.buttonGroupSoundMode.getButtonCount());
     }
 
@@ -50,7 +50,7 @@ class GameSettingsViewTest {
     @Test
     void submitButtonInitiallyDisabled() {
         view.getPanel();
-        
+
         assertEquals(false, view.submitButton.isEnabled());
     }
 

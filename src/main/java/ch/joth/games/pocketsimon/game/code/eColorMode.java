@@ -18,5 +18,10 @@ public enum eColorMode {
     /**
      * Represents the color mode being off. In this mode, only one Button Color is displayed when the buttons needs to be pressed.
      */
-    COLOR_AUDIO_ONLY
+    COLOR_AUDIO_ONLY,
+
+    /**
+     * Represents the Mode of the Buttons. In this mode more than 4 Buttons are displayed.
+     */
+    COLOR_MULTI_BUTTONS
 }

@@ -30,6 +30,10 @@ public class GameSettingsView extends JFrame implements Serializable {
      */
     JRadioButton radioButtonColor;
     /**
+     * JRadioButton for the Multi Button mode selection.
+     */
+    JRadioButton radioButtonColorMultiButton;
+    /**
      * JRadioButton for the Audio Only mode selection.
      */
     JRadioButton radioButtonAudioOnlyMode;
@@ -92,6 +96,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         labelButtonColor = new JLabel("Color mode:");
         radioButtonNoColor = new JRadioButton("Single Color Mode");
         radioButtonColor = new JRadioButton("Simon Color Mode");
+        radioButtonColorMultiButton = new JRadioButton("Multi Button Mode");
         radioButtonAudioOnlyMode = new JRadioButton("Audio only Mode");
         labelSoundMode = new JLabel("Sound mode:");
         radioButtonSound = new JRadioButton("Sound enabled");
@@ -100,6 +105,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         buttonGroupColorMode.add(radioButtonNoColor);
         buttonGroupColorMode.add(radioButtonColor);
         buttonGroupColorMode.add(radioButtonAudioOnlyMode);
+        buttonGroupColorMode.add(radioButtonColorMultiButton);
         panelButtonColor.add(labelButtonColor);
         panelButtonColor.add(radioButtonNoColor);
         panelButtonColor.add(radioButtonColor);
@@ -142,7 +148,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         radioButtonAudioOnlyMode.addActionListener(listener);
         radioButtonNoSound.addActionListener(listener);
         radioButtonSound.addActionListener(listener);
-      
+
     }
 
 

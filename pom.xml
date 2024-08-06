@@ -6,7 +6,7 @@
 
     <groupId>ch.joth.pocketSimon</groupId>
     <artifactId>pocket-simon</artifactId>
-    <version>1.0-SNAPSHOT-Build(20240806_570)</version>
+    <version>1.0-SNAPSHOT-Build(20240806_571)</version>
 
     <properties>
         <maven.compiler.source>20</maven.compiler.source>
