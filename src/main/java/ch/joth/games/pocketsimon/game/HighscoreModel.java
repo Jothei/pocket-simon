@@ -24,7 +24,7 @@ public class HighscoreModel {
     /**
      * Filename of the highscore JSON File.
      */
-    private static final String FILE_PATH = "leaderboard.json";
+    private static String filePath = "leaderboard.json";
     /**
      * ObjectMapper to serialize and deserialize the highscore entries.
      */
@@ -66,8 +66,8 @@ public class HighscoreModel {
      */
     private void saveToFile() {
         try {
-            mapper.writeValue(new File(FILE_PATH), entries);
-        } catch (IOException e) {
+            mapper.writeValue(new File(filePath), entries);
+        } catch (IOException | NullPointerException e) {
             new ServiceFactory().LoggingService().log(e.getMessage(), Level.ERROR, HighscoreModel.class);
         }
     }
@@ -78,7 +78,7 @@ public class HighscoreModel {
      */
     private void loadFromFile() {
         try {
-            File file = new File(FILE_PATH);
+            File file = new File(filePath);
             if (file.exists()) {
                 entries = mapper.readValue(file, new TypeReference<>() {
                 });
