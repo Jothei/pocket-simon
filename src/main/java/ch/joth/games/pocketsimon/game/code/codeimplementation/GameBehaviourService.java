@@ -227,7 +227,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     public void paint(Graphics2D g) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         addButtons(g);
-        addLayout(g);
+        if (this.colorMode != eColorMode.COLOR_MULTI_BUTTONS) {
+            addLayout(g);
+        }
         String gameoverEmoji = service.ConfigService().getValue(eConfigValues.LOOSE_EMOJI);
         String delimiterSymbol = service.ConfigService().getValue(eConfigValues.DELIMITER_SYMBOL);
         if (gameOver) {
@@ -283,7 +285,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      *
      * @param g The Graphics2D object to paint on.
      */
-    private static void addLayout(Graphics2D g) {
+    void addLayout(Graphics2D g) {
         g.fillRect(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
 
         g.setColor(Color.BLACK);

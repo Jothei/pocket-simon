@@ -44,6 +44,7 @@ class GameSettingsViewTest {
         assertEquals(1, view.radioButtonAudioOnlyMode.getActionListeners().length);
         assertEquals(1, view.radioButtonNoSound.getActionListeners().length);
         assertEquals(1, view.radioButtonSound.getActionListeners().length);
+        assertEquals(1, view.radioButtonColorMultiButton.getActionListeners().length);
     }
 
 

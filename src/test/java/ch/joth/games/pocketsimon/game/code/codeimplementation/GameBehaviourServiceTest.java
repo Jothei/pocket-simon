@@ -6,6 +6,8 @@ import ch.joth.games.pocketsimon.game.code.eSoundMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -13,8 +15,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class GameBehaviourServiceTest {
@@ -120,13 +120,30 @@ class GameBehaviourServiceTest {
 
     }
 
-
-    @Test
-    void paint() {
+    @ParameterizedTest
+    @EnumSource(eColorMode.class)
+    void paint(eColorMode value) throws NoSuchFieldException, IllegalAccessException {
         Graphics2D g = mock(Graphics2D.class);
-        doNothing().when(g).drawString(anyString(), anyInt(), anyInt());
-        verify(g, never()).drawString(anyString(), anyInt(), anyInt());
+        Field colorMode = gameBehaviourService.getClass().getDeclaredField("colorMode");
+        colorMode.setAccessible(true);
+        colorMode.set(gameBehaviourService, value);
+
         gameBehaviourService.paint(g);
+
+        verify(g, times(1)).setRenderingHint(any(), any());
+        verify(g, times(1)).drawString(anyString(), anyInt(), anyInt());
+
+        if (eColorMode.COLOR_MULTI_BUTTONS == value) {
+            verify(g, never()).fillRoundRect(anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt());
+        } else {
+            verify(g, times(2)).drawOval(anyInt(), anyInt(), anyInt(), anyInt());
+            verify(g, times(8)).setColor(any(Color.class));
+            verify(g, times(4)).fillRect(anyInt(), anyInt(), anyInt(), anyInt());
+            verify(g, times(2)).setStroke(any());
+            verify(g, times(1)).fillRoundRect(anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt());
+            verify(g, times(1)).setFont(any());
+        }
+
     }
 
     private void setPattern(boolean value) {

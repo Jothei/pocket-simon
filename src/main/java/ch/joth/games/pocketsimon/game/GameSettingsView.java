@@ -75,9 +75,10 @@ public class GameSettingsView extends JFrame implements Serializable {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
-
-        JPanel settingsPanel = getPanel();
-        this.add(settingsPanel);
+        Integer frameWidth = Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_WIDTH)) + 300;
+        Integer frameHeight = Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_HEIGHT));
+        this.setSize(frameWidth, frameHeight);
+        this.add(getPanel());
     }
 
     /**
@@ -87,33 +88,59 @@ public class GameSettingsView extends JFrame implements Serializable {
      * @return the JPanel for the game settings view
      */
     public JPanel getPanel() {
-        // Initialize Components
+
         JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
+
+        setColorPanel(settingsPanel, gridBagConstraints);
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = buttonGroupColorMode.getButtonCount() + 1;
+
+
+        JPanel panelSoundMode = setSoundPanel(gridBagConstraints);
+
+
+        submitButton = new JButton("Spielen!");
+        submitButton.setEnabled(false);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
+
+        settingsPanel.add(panelSoundMode, gridBagConstraints);
+        settingsPanel.add(submitButton, gridBagConstraints);
+        return settingsPanel;
+    }
+
+    private void setColorPanel(JPanel settingsPanel, GridBagConstraints gridBagConstraints) {
         JPanel panelButtonColor = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buttonGroupColorMode = new ButtonGroup();
         labelButtonColor = new JLabel("Color mode:");
         radioButtonNoColor = new JRadioButton("Single Color Mode");
         radioButtonColor = new JRadioButton("Simon Color Mode");
-        radioButtonColorMultiButton = new JRadioButton("Multi Button Mode");
         radioButtonAudioOnlyMode = new JRadioButton("Audio only Mode");
-        labelSoundMode = new JLabel("Sound mode:");
-        radioButtonSound = new JRadioButton("Sound enabled");
-        radioButtonNoSound = new JRadioButton("Sound disabled");
-        buttonGroupColorMode = new ButtonGroup();
+        radioButtonColorMultiButton = new JRadioButton("Multi Button Mode");
         buttonGroupColorMode.add(radioButtonNoColor);
         buttonGroupColorMode.add(radioButtonColor);
-        buttonGroupColorMode.add(radioButtonAudioOnlyMode);
         buttonGroupColorMode.add(radioButtonColorMultiButton);
+        buttonGroupColorMode.add(radioButtonAudioOnlyMode);
+
         panelButtonColor.add(labelButtonColor);
         panelButtonColor.add(radioButtonNoColor);
         panelButtonColor.add(radioButtonColor);
         panelButtonColor.add(radioButtonAudioOnlyMode);
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        panelButtonColor.add(radioButtonColorMultiButton);
         settingsPanel.add(panelButtonColor, gridBagConstraints);
+        labelSoundMode = new JLabel("Sound mode:");
+        radioButtonSound = new JRadioButton("Sound enabled");
+        radioButtonNoSound = new JRadioButton("Sound disabled");
+    }
 
+    private JPanel setSoundPanel(GridBagConstraints gridBagConstraints) {
         JPanel panelSoundMode = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonGroupSoundMode = new ButtonGroup();
         buttonGroupSoundMode.add(radioButtonSound);
@@ -123,17 +150,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         panelSoundMode.add(radioButtonSound);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-
-        settingsPanel.add(panelSoundMode, gridBagConstraints);
-
-        submitButton = new JButton("Spielen!");
-        submitButton.setEnabled(false);
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.anchor = GridBagConstraints.CENTER;
-        settingsPanel.add(submitButton, gridBagConstraints);
-        return settingsPanel;
+        return panelSoundMode;
     }
 
     /**
@@ -148,6 +165,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         radioButtonAudioOnlyMode.addActionListener(listener);
         radioButtonNoSound.addActionListener(listener);
         radioButtonSound.addActionListener(listener);
+        radioButtonColorMultiButton.addActionListener(listener);
 
     }
 
