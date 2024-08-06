@@ -452,7 +452,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * Sets the game over status.
      *
-     * @param gameOver
+     * @param gameOver sets the game over status
      */
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
