@@ -1,13 +1,13 @@
 package ch.joth.games.pocketsimon.game;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.awt.event.ActionListener;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.mock;
 
 class GameSettingsViewTest {
@@ -16,10 +16,11 @@ class GameSettingsViewTest {
 
     @BeforeEach
     void setUp() {
-        view = new GameSettingsView();
+        view = mock(GameSettingsView.class);
+        doCallRealMethod().when(view).getPanel();
     }
 
-    @Disabled
+
     @Test
     void getPanel() {
         view.getPanel();
@@ -28,11 +29,15 @@ class GameSettingsViewTest {
         assertEquals(2, view.buttonGroupSoundMode.getButtonCount());
     }
 
-    @Disabled
+
     @Test
     void setButtonActionListener() {
         ActionListener listener = mock(ActionListener.class);
+        doCallRealMethod().when(view).setButtonActionListener(any());
+
+        view.getPanel();
         view.setButtonActionListener(listener);
+
         assertEquals(1, view.submitButton.getActionListeners().length);
         assertEquals(1, view.radioButtonColor.getActionListeners().length);
         assertEquals(1, view.radioButtonNoColor.getActionListeners().length);
@@ -41,24 +46,13 @@ class GameSettingsViewTest {
         assertEquals(1, view.radioButtonSound.getActionListeners().length);
     }
 
-    @Disabled
+
     @Test
     void submitButtonInitiallyDisabled() {
+        view.getPanel();
+        
         assertEquals(false, view.submitButton.isEnabled());
     }
 
-    @Disabled
-    @Test
-    void constructorInitializesComponents() {
-        assertNotNull(view.labelButtonColor);
-        assertNotNull(view.radioButtonNoColor);
-        assertNotNull(view.radioButtonColor);
-        assertNotNull(view.radioButtonAudioOnlyMode);
-        assertNotNull(view.labelSoundMode);
-        assertNotNull(view.radioButtonSound);
-        assertNotNull(view.radioButtonNoSound);
-        assertNotNull(view.buttonGroupColorMode);
-        assertNotNull(view.buttonGroupSoundMode);
-        assertNotNull(view.submitButton);
-    }
+
 }
