@@ -440,10 +440,20 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         // Added comment to prevent JavaDoc warning.
     }
 
+    /**
+     * This method is used to get if the game is over or not.
+     *
+     * @return Return the state of Gameover.
+     */
     public boolean isGameOver() {
         return gameOver;
     }
 
+    /**
+     * Sets the game over status.
+     *
+     * @param gameOver
+     */
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
     }

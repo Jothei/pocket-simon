@@ -42,8 +42,16 @@ public interface IGameBehaviour {
      */
     void exitGame();
 
-
+    /**
+     * Show the highscore dialog.
+     */
     void showHighscore();
 
+    /**
+     * Initializes the highscore insert dialog.
+     *
+     * @param parent the parent JFrame
+     * @param points the points to be inserted
+     */
     void initHighscoreInsertDialog(JFrame parent, int points);
 }
