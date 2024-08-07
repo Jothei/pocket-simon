@@ -2,6 +2,7 @@ package ch.joth.games.pocketsimon.game.code.codeimplementation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.security.SecureRandom;
 
 /**
  * This class extends JPanel and is responsible for rendering the game form.
@@ -84,5 +85,17 @@ public class FormRendererService extends JPanel {
         return x > 0 && x < WIDTH / 2 && y > 0 && y < HEIGHT / 2;
     }
 
+    /**
+     * This method generates a random color.
+     *
+     * @return A random color.
+     */
+    public static Color getRandomColor(SecureRandom rand) {
+
+        float r = (float) (rand.nextFloat() / 2f + 0.5);
+        float g = (float) (rand.nextFloat() / 2f + 0.5);
+        float b = (float) (rand.nextFloat() / 2f + 0.5);
+        return new Color(r, g, b);
+    }
 
 }

@@ -91,6 +91,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * The highscore entry dialog used to enter the player's name.
      */
     private HighscoreEntryDialog dialog;
+    private Integer buttonCount = 6;
+    private SecureRandom rand = new SecureRandom();
+    private JPanel buttonPanel;
 
     /**
      * Constructor for the GameBehaviour class.
@@ -139,7 +142,11 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     public void startGame(eSoundMode soundMode, eColorMode colorMode) {
         this.colorMode = colorMode;
         this.soundMode = soundMode;
-        this.startGame();
+        if (this.colorMode == eColorMode.COLOR_MULTI_BUTTONS) {
+            createAndShowGUI();
+        } else {
+            this.startGame();
+        }
     }
 
     /**
@@ -154,8 +161,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public void startGame() {
         // Start the game
-
         if (!GraphicsEnvironment.isHeadless()) {
+
             this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
             this.gameFrame.setSize(WIDTH + 8, HEIGHT + 30);
 
@@ -163,14 +170,16 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             this.gameFrame.setResizable(false);
             this.gameFrame.setLocationRelativeTo(null);
             this.gameFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-            this.gameFrame.setVisible(false);
-            this.gameFrame.setEnabled(false);
+            this.gameFrame.add(renderer);
+            this.gameFrame.setEnabled(true);
+            this.gameFrame.setVisible(true);
             timer.start();
+            initGameVariables();
         } else {
-            // Handle headless environment initialization
-            new ServiceFactory().LoggingService().log("Headless environment detected", WARN, this.getClass());
+            service.LoggingService().log("Headless mode is enabled. Game cannot be started.", WARN, this.getClass());
         }
-        initGameVariables();
+
+
     }
 
 
@@ -246,6 +255,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             g.drawString(indexPattern + delimiterSymbol + pattern.size(), WIDTH / 2 - 100, HEIGHT / 2 + 42);
         }
     }
+
 
     /**
      * Adds the buttons to the game GUI.
@@ -466,5 +476,62 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public void setGameOver(boolean gameOver) {
         this.gameOver = gameOver;
+    }
+
+
+    private void addNewButton(int number) {
+        JButton newButton = new JButton("Button " + number);
+        newButton.setBackground(FormRendererService.getRandomColor(this.rand));
+        newButton.addActionListener(e -> new ServiceFactory().LoggingService().log("Button " + number + " pressed", INFO, GameBehaviourService.class));
+
+        buttonPanel.add(newButton);
+
+    }
+
+    private void createAndShowGUI() {
+
+        this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
+        this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.gameFrame.setLayout(new BorderLayout());
+
+        buttonPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                arrangeButtonsInCircle();
+            }
+        };
+        buttonPanel.setLayout(null);
+
+        JScrollPane scrollPane = new JScrollPane(buttonPanel);
+        this.gameFrame.add(scrollPane, BorderLayout.CENTER);
+
+        // Add initial buttons
+        for (int i = 1; i <= buttonCount; i++) {
+            addNewButton(i);
+        }
+
+        this.gameFrame.setSize(600, 600);
+        this.gameFrame.setLocationRelativeTo(null);
+        this.gameFrame.setVisible(true);
+    }
+
+    private void arrangeButtonsInCircle() {
+        int radius = 200; // Radius of the circle
+        int centerX = buttonPanel.getWidth() / 2;
+        int centerY = buttonPanel.getHeight() / 2;
+        int buttonSize = 50; // Size of each button
+
+        Component[] components = buttonPanel.getComponents();
+        int totalButtons = components.length;
+        double angleStep = 2 * Math.PI / totalButtons;
+
+        for (int i = 0; i < totalButtons; i++) {
+            double angle = i * angleStep;
+            int x = centerX + (int) (radius * Math.cos(angle)) - buttonSize / 2;
+            int y = centerY + (int) (radius * Math.sin(angle)) - buttonSize / 2;
+
+            components[i].setBounds(x, y, buttonSize, buttonSize);
+        }
     }
 }
