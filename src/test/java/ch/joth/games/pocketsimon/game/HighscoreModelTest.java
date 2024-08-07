@@ -1,12 +1,12 @@
 package ch.joth.games.pocketsimon.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
+import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -33,7 +33,7 @@ class HighscoreModelTest {
     }
 
     @Test
-    void saveFailCaseTest() throws NoSuchFieldException, IllegalAccessException, IOException, InvocationTargetException {
+    void saveFailCaseTest() throws NoSuchFieldException, IllegalAccessException {
         Field filenameField = highscoreModel.getClass().getDeclaredField("filePath");
         filenameField.setAccessible(true);
         filenameField.set(highscoreModel, null);
@@ -48,7 +48,7 @@ class HighscoreModelTest {
     @Test
     void addEntryTest() {
 
-        highscoreModel.addEntry(new HighscoreEntry("Test", 100));
+        highscoreModel.addEntry(new HighscoreEntry("TestUser_JUNIT", 100));
         assertNotNull(highscoreModel.getEntries());
     }
 
@@ -64,5 +64,15 @@ class HighscoreModelTest {
 
     private void setMapper(ObjectMapper mapper) throws IllegalAccessException {
         this.mapperField.set(highscoreModel, mapper);
+    }
+
+
+    @AfterAll
+    public static void tearDown() {
+        File leaderboardFile = new File("leaderboard.json");
+        if (leaderboardFile.exists()) {
+            leaderboardFile.delete();
+            System.out.println("Deleted leaderboard.json");
+        }
     }
 }

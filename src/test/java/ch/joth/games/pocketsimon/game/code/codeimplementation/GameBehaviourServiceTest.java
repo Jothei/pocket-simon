@@ -11,8 +11,10 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -34,10 +36,14 @@ class GameBehaviourServiceTest {
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
+
         gameBehaviourService = new GameBehaviourService();
         gameMock = spy(gameBehaviourService);
         service = new ServiceFactory();
 
+        Field randomizer = GameBehaviourService.class.getDeclaredField("randomizer");
+        randomizer.setAccessible(true);
+        randomizer.set(gameMock, new SecureRandom());
 
         serviceMock = mock(service.getClass());
         when(serviceMock.ConfigService()).thenReturn(new ConfigService());
@@ -193,6 +199,53 @@ class GameBehaviourServiceTest {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @ParameterizedTest
+    @EnumSource(eColorMode.class)
+    void startGame_setsColorAndSoundModes(eColorMode colorMode) {
+        eSoundMode soundMode = eSoundMode.SOUND_ON;
+        Graphics2D gMock = mock(Graphics2D.class);
+        doNothing().when(gameMock).startGame();
+        doNothing().when(gameMock).createAndShowGUI();
+        doNothing().when(gameMock).addLayout(gMock);
+
+        gameMock.startGame(soundMode, colorMode);
+
+        assertEquals(colorMode, gameMock.getColorMode());
+        assertEquals(soundMode, gameMock.getSoundMode());
+    }
+
+    @Test
+    void startGame_callsCreateAndShowGUI_whenColorModeIsMultiButtons() {
+        eSoundMode soundMode = eSoundMode.SOUND_ON;
+        eColorMode colorMode = eColorMode.COLOR_MULTI_BUTTONS;
+        doNothing().when(gameMock).createAndShowGUI();
+        gameMock.startGame(soundMode, colorMode);
+        verify(gameMock, times(1)).createAndShowGUI();
+    }
+
+    @Test
+    void startGame_callsStartGame_whenColorModeIsNotMultiButtons() {
+        eSoundMode soundMode = eSoundMode.SOUND_ON;
+        eColorMode colorMode = eColorMode.COLOR_ON;
+        doNothing().when(gameMock).startGame();
+        gameMock.startGame(soundMode, colorMode);
+        verify(gameMock, times(1)).startGame();
+    }
+
+    @Test
+    void paint_callsRendererRepaint() throws IllegalAccessException, NoSuchFieldException {
+        ActionEvent actionMock = mock(ActionEvent.class);
+        FormRendererService rendererMock = mock(FormRendererService.class);
+        Field rendererField = gameMock.getClass().getDeclaredField("renderer");
+        rendererField.setAccessible(true);
+        rendererField.set(gameMock, rendererMock);
+
+        gameMock.actionPerformed(actionMock);
+        
+        verify(gameMock, times(1)).actionPerformed(actionMock);
+        verify(rendererMock, times(1)).repaint();
     }
 
 }

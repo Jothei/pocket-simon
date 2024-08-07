@@ -34,7 +34,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * Instance of the ServiceFactory class used to access various services like audio and logging.
      */
-    private final ServiceFactory service;
+    final ServiceFactory service;
     /**
      * Instance of the Timer class used to handle the game ticks.
      */
@@ -430,7 +430,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      *
      * @param soundFile the sound file to be played
      */
-    private void playSound(eSoundFile soundFile) {
+    void playSound(eSoundFile soundFile) {
         if (this.soundMode == eSoundMode.SOUND_ON || this.colorMode == eColorMode.COLOR_AUDIO_ONLY || soundFile == eSoundFile.FAIL) {
             service.AudioService().playSound(soundFile);
         }
@@ -488,7 +488,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
     }
 
-    private void createAndShowGUI() {
+    void createAndShowGUI() {
 
         this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
