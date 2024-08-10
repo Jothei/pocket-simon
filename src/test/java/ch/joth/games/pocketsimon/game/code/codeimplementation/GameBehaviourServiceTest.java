@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -157,7 +158,10 @@ class GameBehaviourServiceTest {
         Field colorMode = gameBehaviourService.getClass().getDeclaredField("colorMode");
         colorMode.setAccessible(true);
         colorMode.set(gameBehaviourService, value);
+        Field buttonPanelField = gameBehaviourService.getClass().getDeclaredField("buttonPanel");
+        buttonPanelField.setAccessible(true);
 
+        buttonPanelField.set(gameBehaviourService, new JPanel());
         gameBehaviourService.paint(g);
 
         verify(g, times(1)).setRenderingHint(any(), any());
@@ -207,7 +211,7 @@ class GameBehaviourServiceTest {
         eSoundMode soundMode = eSoundMode.SOUND_ON;
         Graphics2D gMock = mock(Graphics2D.class);
         doNothing().when(gameMock).startGame();
-        doNothing().when(gameMock).createAndShowGUI();
+        doNothing().when(gameMock).startMultiButtonGame();
         doNothing().when(gameMock).addLayout(gMock);
 
         gameMock.startGame(soundMode, colorMode);
@@ -220,9 +224,9 @@ class GameBehaviourServiceTest {
     void startGame_callsCreateAndShowGUI_whenColorModeIsMultiButtons() {
         eSoundMode soundMode = eSoundMode.SOUND_ON;
         eColorMode colorMode = eColorMode.COLOR_MULTI_BUTTONS;
-        doNothing().when(gameMock).createAndShowGUI();
+        doNothing().when(gameMock).startMultiButtonGame();
         gameMock.startGame(soundMode, colorMode);
-        verify(gameMock, times(1)).createAndShowGUI();
+        verify(gameMock, times(1)).startMultiButtonGame();
     }
 
     @Test
@@ -243,7 +247,7 @@ class GameBehaviourServiceTest {
         rendererField.set(gameMock, rendererMock);
 
         gameMock.actionPerformed(actionMock);
-        
+
         verify(gameMock, times(1)).actionPerformed(actionMock);
         verify(rendererMock, times(1)).repaint();
     }

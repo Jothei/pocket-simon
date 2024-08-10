@@ -91,7 +91,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * The highscore entry dialog used to enter the player's name.
      */
     private HighscoreEntryDialog dialog;
-    private Integer buttonCount = 6;
+    private Integer buttonCount = 4;
     private SecureRandom rand = new SecureRandom();
     private JPanel buttonPanel;
 
@@ -143,8 +143,10 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         this.colorMode = colorMode;
         this.soundMode = soundMode;
         if (this.colorMode == eColorMode.COLOR_MULTI_BUTTONS) {
-            createAndShowGUI();
+            this.buttonCount = 6;
+            startMultiButtonGame();
         } else {
+            this.buttonCount = 4;
             this.startGame();
         }
     }
@@ -162,19 +164,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     public void startGame() {
         // Start the game
         if (!GraphicsEnvironment.isHeadless()) {
-
             this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
-            this.gameFrame.setSize(WIDTH + 8, HEIGHT + 30);
-
-            this.gameFrame.addMouseListener(this);
-            this.gameFrame.setResizable(false);
-            this.gameFrame.setLocationRelativeTo(null);
-            this.gameFrame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-            this.gameFrame.add(renderer);
-            this.gameFrame.setEnabled(true);
-            this.gameFrame.setVisible(true);
+            setGameFrameSettings();
             timer.start();
-            initGameVariables();
         } else {
             service.LoggingService().log("Headless mode is enabled. Game cannot be started.", WARN, this.getClass());
         }
@@ -182,6 +174,35 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
     }
 
+
+    void startMultiButtonGame() {
+        if (!GraphicsEnvironment.isHeadless()) {
+
+            this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
+
+            buttonPanel = new JPanel() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    arrangeButtonsInCircle();
+
+                }
+            };
+            buttonPanel.setLayout(null);
+            for (int i = 1; i <= buttonCount; i++) {
+                addNewButton(i);
+            }
+            JScrollPane scrollPane = new JScrollPane(buttonPanel);
+            this.gameFrame.add(scrollPane, BorderLayout.CENTER);
+
+            this.setGameFrameSettings();
+            renderer.repaint();
+            timer.start();
+
+        } else {
+            service.LoggingService().log("Headless mode is enabled. Game cannot be started.", WARN, GameBehaviourService.class);
+        }
+    }
 
     /**
      * This method initializing the game variables before the game can start.
@@ -216,7 +237,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (createPattern) {
             if (dark <= 0) {
                 if (indexPattern >= pattern.size()) {
-                    flashed = randomizer.nextInt(40) % 4 + 1;
+                    flashed = randomizer.nextInt(40) % this.buttonCount + 1;
                     pattern.add(flashed);
                     indexPattern = 0;
                     createPattern = false;
@@ -243,9 +264,12 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public void paint(Graphics2D g) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        addButtons(g);
         if (this.colorMode != eColorMode.COLOR_MULTI_BUTTONS) {
+            addButtonsPaint(g);
             addLayout(g);
+        } else {
+            addMultiButtonsPaint();
+            arrangeButtonsInCircle();
         }
         String gameoverEmoji = service.ConfigService().getValue(eConfigValues.LOOSE_EMOJI);
         String delimiterSymbol = service.ConfigService().getValue(eConfigValues.DELIMITER_SYMBOL);
@@ -262,7 +286,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      *
      * @param g The Graphics2D object to paint on.
      */
-    private void addButtons(Graphics2D g) {
+    private void addButtonsPaint(Graphics2D g) {
         if (flashed == 1) {
             this.setColor(Color.GREEN, g, true);
             playSound(eSoundFile.GREEN);
@@ -295,6 +319,18 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             playSound(eSoundFile.BLUE);
         } else {
             this.setColor(Color.BLUE, g, false);
+        }
+    }
+
+    /**
+     * Adds the buttons to the game GUI for Multi Button Mode.
+     */
+    private void addMultiButtonsPaint() {
+        Component[] components = buttonPanel.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            Graphics2D g = (Graphics2D) components[i].getGraphics();
+            this.setColor(components[i].getBackground(), g, flashed == i);
+            new ServiceFactory().LoggingService().log("Button " + (i + 1) + " flashed: " + (flashed == i), INFO, GameBehaviourService.class);
         }
     }
 
@@ -357,6 +393,44 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     @Override
     public void mousePressed(MouseEvent e) {
+        if (this.colorMode == eColorMode.COLOR_MULTI_BUTTONS) {
+            multiButtonMousePressEvent(e);
+        } else {
+            regularMousePressEvent(e);
+        }
+    }
+
+    private void flashedIteration() {
+        if (flashed != 0) {
+            if (pattern.get(indexPattern) == flashed) {
+                indexPattern++;
+            } else {
+                playSound(eSoundFile.FAIL);
+                service.LoggingService().log("Game Over", WARN, this.getClass(), "flashed: " + flashed);
+                initHighscoreInsertDialog(this.gameFrame, pattern.size());
+                gameOver = true;
+            }
+        }
+    }
+
+    private void multiButtonMousePressEvent(MouseEvent e) {
+        Point clickPoint = e.getPoint();
+        Component[] components = buttonPanel.getComponents();
+        for (int i = 0; i < components.length; i++) {
+            if (!createPattern && !gameOver) {
+
+                if (components[i].getBounds().contains(clickPoint)) {
+                    flashed = i;
+                    ticks = 1;
+                    new ServiceFactory().LoggingService().log("Button " + (i + 1) + " pressed", INFO, GameBehaviourService.class);
+                }
+                flashedIteration();
+            }
+        }
+    }
+
+
+    private void regularMousePressEvent(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
 
@@ -383,16 +457,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
                 playSound(eSoundFile.BLUE);
             }
 
-            if (flashed != 0) {
-                if (pattern.get(indexPattern) == flashed) {
-                    indexPattern++;
-                } else {
-                    playSound(eSoundFile.FAIL);
-                    service.LoggingService().log("Game Over", WARN, this.getClass(), "flashed: " + flashed);
-                    initHighscoreInsertDialog(this.gameFrame, pattern.size());
-                    gameOver = true;
-                }
-            }
+            flashedIteration();
         } else if (gameOver) {
             service.LoggingService().log("Restart Game after Game Over", INFO, this.getClass(), "flashed: " + flashed);
             initGameVariables();
@@ -408,12 +473,15 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * @param flashed a boolean indicating whether the button is flashed
      */
     void setColor(Color color, Graphics2D g, Boolean flashed) {
+
+
         if (this.colorMode == eColorMode.COLOR_ON) {
             if (flashed) {
                 g.setColor(color);
             } else {
                 g.setColor(color.darker());
             }
+
         } else if (this.colorMode == eColorMode.COLOR_AUDIO_ONLY) {
             g.setColor(color);
         } else {
@@ -424,6 +492,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             }
         }
     }
+
 
     /**
      * Plays the specified sound file.
@@ -480,41 +549,15 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
 
     private void addNewButton(int number) {
-        JButton newButton = new JButton("Button " + number);
+        JButton newButton = new JButton(String.valueOf(number));
         newButton.setBackground(FormRendererService.getRandomColor(this.rand));
         newButton.addActionListener(e -> new ServiceFactory().LoggingService().log("Button " + number + " pressed", INFO, GameBehaviourService.class));
 
         buttonPanel.add(newButton);
-
+        buttonPanel.revalidate();
+        buttonPanel.repaint();
     }
 
-    void createAndShowGUI() {
-
-        this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
-        this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.gameFrame.setLayout(new BorderLayout());
-
-        buttonPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                arrangeButtonsInCircle();
-            }
-        };
-        buttonPanel.setLayout(null);
-
-        JScrollPane scrollPane = new JScrollPane(buttonPanel);
-        this.gameFrame.add(scrollPane, BorderLayout.CENTER);
-
-        // Add initial buttons
-        for (int i = 1; i <= buttonCount; i++) {
-            addNewButton(i);
-        }
-
-        this.gameFrame.setSize(600, 600);
-        this.gameFrame.setLocationRelativeTo(null);
-        this.gameFrame.setVisible(true);
-    }
 
     private void arrangeButtonsInCircle() {
         int radius = 200; // Radius of the circle
@@ -534,4 +577,18 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             components[i].setBounds(x, y, buttonSize, buttonSize);
         }
     }
+
+    private void setGameFrameSettings() {
+        this.gameFrame.setSize(WIDTH + 8, HEIGHT + 30);
+        this.gameFrame.setResizable(false);
+        this.gameFrame.setLocationRelativeTo(null);
+        this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.gameFrame.setLayout(new BorderLayout());
+        this.gameFrame.setEnabled(true);
+        this.gameFrame.setVisible(true);
+        this.gameFrame.addMouseListener(this);
+        this.gameFrame.add(renderer);
+        initGameVariables();
+    }
+
 }
