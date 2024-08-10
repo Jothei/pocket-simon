@@ -166,6 +166,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (!GraphicsEnvironment.isHeadless()) {
             this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
             setGameFrameSettings();
+            this.gameFrame.add(renderer);
+            initGameVariables();
+
             timer.start();
         } else {
             service.LoggingService().log("Headless mode is enabled. Game cannot be started.", WARN, this.getClass());
@@ -179,7 +182,10 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (!GraphicsEnvironment.isHeadless()) {
 
             this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
+            this.gameFrame.setLayout(new BorderLayout());
 
+
+            this.setGameFrameSettings();
             buttonPanel = new JPanel() {
                 @Override
                 protected void paintComponent(Graphics g) {
@@ -189,14 +195,21 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
                 }
             };
             buttonPanel.setLayout(null);
+            buttonPanel.setVisible(true);
+            buttonPanel.setEnabled(true);
+
+
             for (int i = 1; i <= buttonCount; i++) {
                 addNewButton(i);
             }
             JScrollPane scrollPane = new JScrollPane(buttonPanel);
-            this.gameFrame.add(scrollPane, BorderLayout.CENTER);
-
-            this.setGameFrameSettings();
-            renderer.repaint();
+            scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            scrollPane.setPreferredSize(new Dimension(gameFrame.getWidth(), (int) (gameFrame.getHeight() * 0.9)));
+            this.gameFrame.add(scrollPane, BorderLayout.NORTH);
+            renderer.setPreferredSize(new Dimension(gameFrame.getWidth(), 0));
+            renderer.setAlignmentY(Component.TOP_ALIGNMENT);
+            this.gameFrame.add(renderer);
+            initGameVariables();
             timer.start();
 
         } else {
@@ -236,7 +249,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
         if (createPattern) {
             if (dark <= 0) {
-                if (indexPattern >= pattern.size()) {
+                if (indexPattern >= pattern.size()) { // Choose new Button to be pressed
                     flashed = randomizer.nextInt(40) % this.buttonCount + 1;
                     pattern.add(flashed);
                     indexPattern = 0;
@@ -264,19 +277,22 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     public void paint(Graphics2D g) {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        String gameoverEmoji = service.ConfigService().getValue(eConfigValues.LOOSE_EMOJI);
+        String delimiterSymbol = service.ConfigService().getValue(eConfigValues.DELIMITER_SYMBOL);
+
         if (this.colorMode != eColorMode.COLOR_MULTI_BUTTONS) {
             addButtonsPaint(g);
             addLayout(g);
+            if (gameOver) {
+                g.drawString(gameoverEmoji, WIDTH / 2 - 100, HEIGHT / 2 + 42);
+            } else {
+                g.drawString(indexPattern + delimiterSymbol + pattern.size(), WIDTH / 2 - 100, HEIGHT / 2 + 42);
+            }
         } else {
             addMultiButtonsPaint();
-            arrangeButtonsInCircle();
-        }
-        String gameoverEmoji = service.ConfigService().getValue(eConfigValues.LOOSE_EMOJI);
-        String delimiterSymbol = service.ConfigService().getValue(eConfigValues.DELIMITER_SYMBOL);
-        if (gameOver) {
-            g.drawString(gameoverEmoji, WIDTH / 2 - 100, HEIGHT / 2 + 42);
-        } else {
-            g.drawString(indexPattern + delimiterSymbol + pattern.size(), WIDTH / 2 - 100, HEIGHT / 2 + 42);
+            g.drawString(indexPattern + delimiterSymbol + pattern.size(), 50, 50);
+
+            // Add Game Ending for Multi Button Mode. //NOSONAR
         }
     }
 
@@ -328,10 +344,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     private void addMultiButtonsPaint() {
         Component[] components = buttonPanel.getComponents();
         for (int i = 0; i < components.length; i++) {
-            Graphics2D g = (Graphics2D) components[i].getGraphics();
-            this.setColor(components[i].getBackground(), g, flashed == i);
-            new ServiceFactory().LoggingService().log("Button " + (i + 1) + " flashed: " + (flashed == i), INFO, GameBehaviourService.class);
+            this.setColor((JButton) components[i]);
         }
+
     }
 
     /**
@@ -402,9 +417,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
     private void flashedIteration() {
         if (flashed != 0) {
-            if (pattern.get(indexPattern) == flashed) {
+            if (pattern.get(indexPattern) == flashed) { // Correct Button
                 indexPattern++;
-            } else {
+            } else { // Wrong Button
                 playSound(eSoundFile.FAIL);
                 service.LoggingService().log("Game Over", WARN, this.getClass(), "flashed: " + flashed);
                 initHighscoreInsertDialog(this.gameFrame, pattern.size());
@@ -414,17 +429,17 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     }
 
     private void multiButtonMousePressEvent(MouseEvent e) {
-        Point clickPoint = e.getPoint();
+
+        Point clickPoint = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), buttonPanel);
         Component[] components = buttonPanel.getComponents();
         for (int i = 0; i < components.length; i++) {
-            if (!createPattern && !gameOver) {
+            if ((!createPattern && !gameOver) && (components[i].getBounds().contains(clickPoint))) {
 
-                if (components[i].getBounds().contains(clickPoint)) {
-                    flashed = i;
-                    ticks = 1;
-                    new ServiceFactory().LoggingService().log("Button " + (i + 1) + " pressed", INFO, GameBehaviourService.class);
-                }
+                flashed = this.getJButtonTextinInt((JButton) components[i]);
+                ticks = 1;
+                new ServiceFactory().LoggingService().log("Button " + (i + 1) + " pressed", INFO, GameBehaviourService.class);
                 flashedIteration();
+
             }
         }
     }
@@ -478,6 +493,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (this.colorMode == eColorMode.COLOR_ON) {
             if (flashed) {
                 g.setColor(color);
+
             } else {
                 g.setColor(color.darker());
             }
@@ -493,6 +509,19 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         }
     }
 
+    /**
+     * Sets the color for the game buttons.
+     *
+     * @param button the color to be set
+     */
+    void setColor(JButton button) {
+        int text = this.getJButtonTextinInt(button);
+        if (this.flashed == text) {
+            button.setBackground(button.getBackground().brighter());
+        } else {
+            button.setBackground(button.getBackground());
+        }
+    }
 
     /**
      * Plays the specified sound file.
@@ -551,11 +580,13 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     private void addNewButton(int number) {
         JButton newButton = new JButton(String.valueOf(number));
         newButton.setBackground(FormRendererService.getRandomColor(this.rand));
-        newButton.addActionListener(e -> new ServiceFactory().LoggingService().log("Button " + number + " pressed", INFO, GameBehaviourService.class));
+        newButton.setVisible(true);
+        newButton.setEnabled(true);
+
+        newButton.addMouseListener(this);
 
         buttonPanel.add(newButton);
-        buttonPanel.revalidate();
-        buttonPanel.repaint();
+
     }
 
 
@@ -579,16 +610,21 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     }
 
     private void setGameFrameSettings() {
+
+
         this.gameFrame.setSize(WIDTH + 8, HEIGHT + 30);
         this.gameFrame.setResizable(false);
         this.gameFrame.setLocationRelativeTo(null);
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.gameFrame.setLayout(new BorderLayout());
+        this.gameFrame.addMouseListener(this);
+
         this.gameFrame.setEnabled(true);
         this.gameFrame.setVisible(true);
-        this.gameFrame.addMouseListener(this);
-        this.gameFrame.add(renderer);
-        initGameVariables();
+    }
+
+    private int getJButtonTextinInt(JButton button) {
+        return Integer.parseInt(button.getText());
     }
 
 }

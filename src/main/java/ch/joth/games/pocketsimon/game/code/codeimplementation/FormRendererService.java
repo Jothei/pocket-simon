@@ -95,7 +95,7 @@ public class FormRendererService extends JPanel {
         float r = (float) (rand.nextFloat() / 2f + 0.5);
         float g = (float) (rand.nextFloat() / 2f + 0.5);
         float b = (float) (rand.nextFloat() / 2f + 0.5);
-        return new Color(r, g, b);
+        return new Color(r, g, b, 1f);
     }
 
 }
