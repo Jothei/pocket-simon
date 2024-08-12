@@ -182,7 +182,6 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         if (!GraphicsEnvironment.isHeadless()) {
 
             this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
-            this.gameFrame.setLayout(new BorderLayout());
 
 
             this.setGameFrameSettings();
@@ -194,9 +193,6 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
                 }
             };
-            buttonPanel.setLayout(null);
-            buttonPanel.setVisible(true);
-            buttonPanel.setEnabled(true);
 
 
             for (int i = 1; i <= buttonCount; i++) {
@@ -209,6 +205,9 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             renderer.setPreferredSize(new Dimension(gameFrame.getWidth(), 0));
             renderer.setAlignmentY(Component.TOP_ALIGNMENT);
             this.gameFrame.add(renderer);
+            buttonPanel.setLayout(null);
+            buttonPanel.setVisible(true);
+            buttonPanel.setEnabled(true);
             initGameVariables();
             timer.start();
 
@@ -251,6 +250,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             if (dark <= 0) {
                 if (indexPattern >= pattern.size()) { // Choose new Button to be pressed
                     flashed = randomizer.nextInt(40) % this.buttonCount + 1;
+                    service.LoggingService().log("New Color Button generated: " + flashed, INFO, this.getClass());
                     pattern.add(flashed);
                     indexPattern = 0;
                     createPattern = false;
@@ -433,13 +433,16 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         Point clickPoint = SwingUtilities.convertPoint(e.getComponent(), e.getPoint(), buttonPanel);
         Component[] components = buttonPanel.getComponents();
         for (int i = 0; i < components.length; i++) {
-            if ((!createPattern && !gameOver) && (components[i].getBounds().contains(clickPoint))) {
-
-                flashed = this.getJButtonTextinInt((JButton) components[i]);
+            Component c = components[i];
+            if (!createPattern && !gameOver && c.getBounds().contains(clickPoint)) {
+                flashed = this.getJButtonTextinInt((JButton) c);
                 ticks = 1;
-                new ServiceFactory().LoggingService().log("Button " + (i + 1) + " pressed", INFO, GameBehaviourService.class);
+                service.LoggingService().log("Button " + (i + 1) + "  clicked", INFO, this.getClass());
                 flashedIteration();
-
+            } else if (gameOver) {
+                service.LoggingService().log("Restart Game after Game Over", INFO, this.getClass(), "flashed: " + flashed);
+                initGameVariables();
+                gameOver = false;
             }
         }
     }
@@ -594,7 +597,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         int radius = 200; // Radius of the circle
         int centerX = buttonPanel.getWidth() / 2;
         int centerY = buttonPanel.getHeight() / 2;
-        int buttonSize = 50; // Size of each button
+        int buttonSize = 100; // Size of each button
 
         Component[] components = buttonPanel.getComponents();
         int totalButtons = components.length;
@@ -618,9 +621,10 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.addMouseListener(this);
-
-        this.gameFrame.setEnabled(true);
-        this.gameFrame.setVisible(true);
+        if (this.colorMode != eColorMode.COLOR_MULTI_BUTTONS) {
+            this.gameFrame.setEnabled(true);
+            this.gameFrame.setVisible(true);
+        }
     }
 
     private int getJButtonTextinInt(JButton button) {
