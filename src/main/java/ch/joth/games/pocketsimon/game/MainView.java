@@ -39,7 +39,7 @@ public class MainView extends JFrame {
         // Set the size of the frame
         this.setSize(Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_WIDTH)), Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_HEIGHT)));
         // Set the default close operation
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         // Set the layout of the frame
         this.setLayout(new BorderLayout());
         // Center the frame

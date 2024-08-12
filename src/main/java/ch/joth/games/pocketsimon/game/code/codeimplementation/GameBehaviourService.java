@@ -494,7 +494,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
 
         if (this.colorMode == eColorMode.COLOR_ON) {
-            if (flashed) {
+            if (flashed != null) {
                 g.setColor(color);
 
             } else {
@@ -504,7 +504,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         } else if (this.colorMode == eColorMode.COLOR_AUDIO_ONLY) {
             g.setColor(color);
         } else {
-            if (flashed) {
+            if (flashed != null) {
                 g.setColor(Color.white);
             } else {
                 g.setColor(Color.lightGray);
