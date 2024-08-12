@@ -343,8 +343,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      */
     private void addMultiButtonsPaint() {
         Component[] components = buttonPanel.getComponents();
-        for (int i = 0; i < components.length; i++) {
-            this.setColor((JButton) components[i]);
+        for (Component component : components) {
+            this.setColor((JButton) component);
         }
 
     }
