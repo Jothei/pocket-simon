@@ -4,6 +4,7 @@ import ch.joth.games.pocketsimon.game.HighscoreEntryDialog;
 import ch.joth.games.pocketsimon.game.HighscoreView;
 import ch.joth.games.pocketsimon.game.code.*;
 import ch.joth.games.pocketsimon.game.code.codedefinition.IGameBehaviour;
+import org.apache.logging.log4j.Level;
 
 import javax.swing.*;
 import java.awt.*;
@@ -346,7 +347,12 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     private void addMultiButtonsPaint() {
         Component[] components = buttonPanel.getComponents();
         for (Component component : components) {
-            this.setColor((JButton) component);
+            try {
+                this.setColor((JButton) component);
+            } catch (IllegalAccessException e) {
+                service.LoggingService().log("Error in Multi Button Mode", Level.ERROR, this.getClass(), e);
+            }
+
         }
 
     }
@@ -519,8 +525,11 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      *
      * @param button the color to be set
      */
-    void setColor(JButton button) {
+    void setColor(JButton button) throws IllegalAccessException {
         int text = this.getJButtonTextinInt(button);
+        if (this.colorMode != eColorMode.COLOR_MULTI_BUTTONS) {
+            throw new IllegalAccessException("This method is only allowed for Multi Button Mode");
+        }
         if (this.flashed == text) {
             button.setBackground(button.getBackground().brighter());
         } else {

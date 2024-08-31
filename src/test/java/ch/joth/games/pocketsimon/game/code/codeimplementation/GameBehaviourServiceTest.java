@@ -32,6 +32,7 @@ class GameBehaviourServiceTest {
     Field createPatternField;
     Field flashedField;
     Field frameField;
+    Field colorModeField;
 
     int ticks;
 
@@ -50,6 +51,8 @@ class GameBehaviourServiceTest {
         when(serviceMock.ConfigService()).thenReturn(new ConfigService());
         when(serviceMock.LoggingService()).thenReturn(new LoggingService());
 
+        colorModeField = gameMock.getClass().getDeclaredField("colorMode");
+        colorModeField.setAccessible(true);
 
         Field ticksField = gameBehaviourService.getClass().getDeclaredField("ticks");
         ticksField.setAccessible(true);
@@ -252,4 +255,23 @@ class GameBehaviourServiceTest {
         verify(rendererMock, times(1)).repaint();
     }
 
+    @Test
+    void setColorMultiButtonThrows() throws IllegalAccessException {
+        JButton buttonMock = mock(JButton.class);
+
+        this.colorModeField.set(gameMock, eColorMode.COLOR_ON);
+
+        assertThrows(IllegalArgumentException.class, () -> gameMock.setColor(buttonMock));
+    }
+
+    @Test
+    void setColorMultiButtonDoesentThrow() throws IllegalAccessException {
+        JButton buttonMock = spy(JButton.class);
+        buttonMock.setText("1");
+
+        this.flashedField.set(gameMock, 0);
+        this.colorModeField.set(gameMock, eColorMode.COLOR_MULTI_BUTTONS);
+
+        assertDoesNotThrow(() -> gameMock.setColor(buttonMock));
+    }
 }
