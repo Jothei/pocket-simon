@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
+import java.awt.event.ActionEvent;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,9 +46,10 @@ class GameSettingsControllerTest {
         GameSettingsModel modelMock = mock(GameSettingsModel.class);
         GameSettingsController.SettingsButtonListener listener = controller.new SettingsButtonListener(viewMock, viewMock.buttonGroupColorMode, viewMock.buttonGroupSoundMode, modelMock);
         GameSettingsController.SettingsButtonListener listenerSpy = spy(listener);
-        listenerSpy.actionPerformed(null);
+        ActionEvent actionEvent = new ActionEvent(viewMock, 0, "test");
+        listenerSpy.actionPerformed(actionEvent);
 
-        verify(modelMock, times(1)).setMenuAction(any(), any(), any(), any());
+        verify(modelMock, times(1)).setMenuAction(any(), any(), any(), any(), any(Object.class));
 
     }
 }

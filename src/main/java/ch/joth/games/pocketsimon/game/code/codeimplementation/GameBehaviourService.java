@@ -208,6 +208,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             buttonPanel.setLayout(null);
             buttonPanel.setVisible(true);
             buttonPanel.setEnabled(true);
+            this.gameFrame.setEnabled(true);
+            this.gameFrame.setVisible(true);
             initGameVariables();
             timer.start();
 
@@ -438,12 +440,12 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
                 flashed = this.getJButtonTextinInt((JButton) c);
                 ticks = 1;
                 service.LoggingService().log("Button " + (i + 1) + "  clicked", INFO, this.getClass());
-                flashedIteration();
             } else if (gameOver) {
                 service.LoggingService().log("Restart Game after Game Over", INFO, this.getClass(), "flashed: " + flashed);
                 initGameVariables();
                 gameOver = false;
             }
+            flashedIteration();
         }
     }
 

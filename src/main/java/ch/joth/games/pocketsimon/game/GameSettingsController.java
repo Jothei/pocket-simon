@@ -74,7 +74,7 @@ public class GameSettingsController {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            this.model.setMenuAction(service, soundModeGroup, colorModeGroup, view);
+            this.model.setMenuAction(service, soundModeGroup, colorModeGroup, view, e.getSource());
         }
     }
 }

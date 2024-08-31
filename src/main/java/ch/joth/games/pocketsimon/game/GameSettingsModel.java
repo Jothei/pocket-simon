@@ -21,6 +21,13 @@ public class GameSettingsModel {
         // To prevent JavaDoc Issues
     }
 
+    private String selectedColorMode;
+    private String selectedSoundMode;
+    private GameSettingsView gameView;
+    private eSoundMode soundMode;
+    private eColorMode colorMode;
+    private ServiceFactory service;
+
     /**
      * Returns the action command of the selected button in the provided button group.
      *
@@ -48,13 +55,15 @@ public class GameSettingsModel {
      * @param soundModeGroup a ButtonGroup instance for sound mode
      * @param colorModeGroup a ButtonGroup instance for color mode
      * @param view           a GameSettingsView instance
+     * @param sender         the object that triggered the action
      */
-    void setMenuAction(ServiceFactory service, ButtonGroup soundModeGroup, ButtonGroup colorModeGroup, GameSettingsView view) {
-        eSoundMode soundMode = eSoundMode.SOUND_ON;
-        eColorMode colorMode = eColorMode.COLOR_ON;
-        String selectedColorMode = getSelectedButtonText(colorModeGroup);
-        String selectedSoundMode = getSelectedButtonText(soundModeGroup);
-
+    void setMenuAction(ServiceFactory service, ButtonGroup soundModeGroup, ButtonGroup colorModeGroup, GameSettingsView view, Object sender) {
+        soundMode = eSoundMode.SOUND_ON;
+        colorMode = eColorMode.COLOR_ON;
+        selectedColorMode = getSelectedButtonText(colorModeGroup);
+        selectedSoundMode = getSelectedButtonText(soundModeGroup);
+        this.gameView = view;
+        this.service = service;
         if (Objects.equals(selectedSoundMode, "Sound disabled")) {
             soundMode = eSoundMode.SOUND_OFF;
         }
@@ -66,13 +75,22 @@ public class GameSettingsModel {
         } else if (Objects.equals(selectedColorMode, "Multi Button Mode")) {
             colorMode = eColorMode.COLOR_MULTI_BUTTONS;
         }
+        view.getSubmitButton().setEnabled(isSetupComplete());
+        if (sender instanceof JButton) {
+            startGame();
+        }
+    }
 
-        if ((selectedColorMode != null && selectedSoundMode != null)) {
-            view.buttonGroupSoundMode.clearSelection();
-            view.buttonGroupColorMode.clearSelection();
-            view.dispose();
+    private void startGame() {
+        if (isSetupComplete()) {
+            this.gameView.buttonGroupSoundMode.clearSelection();
+            this.gameView.buttonGroupColorMode.clearSelection();
+            this.gameView.dispose();
             service.GameBehaviour().startGame(soundMode, colorMode);
         }
     }
 
+    private boolean isSetupComplete() {
+        return selectedColorMode != null && selectedSoundMode != null;
+    }
 }

@@ -75,8 +75,8 @@ public class GameSettingsView extends JFrame implements Serializable {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
-        Integer frameWidth = Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_WIDTH)) + 300;
-        Integer frameHeight = Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_HEIGHT));
+        int frameWidth = Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_WIDTH)) + 300;
+        int frameHeight = Integer.parseInt(serviceFactory.ConfigService().getValue(eConfigValues.MENU_HEIGHT));
         this.setSize(frameWidth, frameHeight);
         this.add(getPanel());
     }
@@ -97,7 +97,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         setColorPanel(settingsPanel, gridBagConstraints);
 
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = buttonGroupColorMode.getButtonCount() + 1;
 
 
@@ -106,12 +106,14 @@ public class GameSettingsView extends JFrame implements Serializable {
 
         submitButton = new JButton("Spielen!");
         submitButton.setEnabled(false);
+
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.gridwidth = 3;
         gridBagConstraints.anchor = GridBagConstraints.CENTER;
 
         settingsPanel.add(panelSoundMode, gridBagConstraints);
+        gridBagConstraints.gridy = 3;
+
         settingsPanel.add(submitButton, gridBagConstraints);
         return settingsPanel;
     }
@@ -149,7 +151,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         panelSoundMode.add(radioButtonNoSound);
         panelSoundMode.add(radioButtonSound);
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 3;
         return panelSoundMode;
     }
 
@@ -169,5 +171,13 @@ public class GameSettingsView extends JFrame implements Serializable {
 
     }
 
+    /**
+     * Retrieves SubmitButton Instance.
+     *
+     * @return the SubmitButton for starting a Game.
+     */
+    public JButton getSubmitButton() {
+        return submitButton;
+    }
 
 }
