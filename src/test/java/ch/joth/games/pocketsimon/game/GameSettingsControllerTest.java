@@ -49,7 +49,7 @@ class GameSettingsControllerTest {
         ActionEvent actionEvent = new ActionEvent(viewMock, 0, "test");
         listenerSpy.actionPerformed(actionEvent);
 
-        verify(modelMock, times(1)).setMenuAction(any(), any(), any(), any(), any(Object.class));
+        verify(modelMock, times(1)).setMenuAction(any(), any(), any(), any(), any());
 
     }
 }
