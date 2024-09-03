@@ -365,8 +365,16 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     void addLayout(Graphics2D g) {
         g.fillRect(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
 
-        g.setColor(Color.BLACK);
-        g.fillRoundRect(225, 220, 350, 350, 350, 350);
+        // Define the size of the oval
+        int ovalWidth = 350;  // Width of the oval
+        int ovalHeight = 350; // Height of the oval
+
+        // Calculate the top-left corner of the oval
+        int x = (WIDTH - ovalWidth) / 2;
+        int y = (HEIGHT - ovalHeight) / 2;
+
+        g.setColor(Color.black);
+        g.fillOval(x, y, ovalWidth, ovalHeight);
 
         g.setColor(Color.GRAY);
         g.setStroke(new BasicStroke(200));

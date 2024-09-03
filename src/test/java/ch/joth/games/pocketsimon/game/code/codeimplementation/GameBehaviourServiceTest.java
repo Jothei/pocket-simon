@@ -171,13 +171,12 @@ class GameBehaviourServiceTest {
         verify(g, times(1)).drawString(anyString(), anyInt(), anyInt());
 
         if (eColorMode.COLOR_MULTI_BUTTONS == value) {
-            verify(g, never()).fillRoundRect(anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt());
+            verify(g, never()).fillRect(anyInt(), anyInt(), anyInt(), anyInt());
         } else {
             verify(g, times(2)).drawOval(anyInt(), anyInt(), anyInt(), anyInt());
             verify(g, times(8)).setColor(any(Color.class));
             verify(g, times(4)).fillRect(anyInt(), anyInt(), anyInt(), anyInt());
             verify(g, times(2)).setStroke(any());
-            verify(g, times(1)).fillRoundRect(anyInt(), anyInt(), anyInt(), anyInt(), anyInt(), anyInt());
             verify(g, times(1)).setFont(any());
         }
 
