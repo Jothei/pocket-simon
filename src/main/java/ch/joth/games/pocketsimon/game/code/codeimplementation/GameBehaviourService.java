@@ -71,7 +71,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
     /**
      * A random number generator used to create the pattern.
      */
-    private SecureRandom randomizer;
+    private SecureRandom randomizer = new SecureRandom();
     /**
      * A boolean indicating whether the game is over. If true, the game is over.
      */
@@ -510,7 +510,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
 
         if (this.colorMode == eColorMode.COLOR_ON) {
-            if (flashed != null) {
+            if (flashed) {
                 g.setColor(color);
 
             } else {

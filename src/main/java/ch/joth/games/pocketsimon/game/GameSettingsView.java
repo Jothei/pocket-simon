@@ -125,7 +125,7 @@ public class GameSettingsView extends JFrame implements Serializable {
         radioButtonNoColor = new JRadioButton("Single Color Mode");
         radioButtonColor = new JRadioButton("Simon Color Mode");
         radioButtonAudioOnlyMode = new JRadioButton("Audio only Mode");
-        radioButtonColorMultiButton = new JRadioButton("Multi Button Mode");
+        radioButtonColorMultiButton = new JRadioButton("Multi Button Mode (Alpha)");
         buttonGroupColorMode.add(radioButtonNoColor);
         buttonGroupColorMode.add(radioButtonColor);
         buttonGroupColorMode.add(radioButtonColorMultiButton);
