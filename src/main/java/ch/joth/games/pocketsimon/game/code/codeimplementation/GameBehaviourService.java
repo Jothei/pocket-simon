@@ -366,7 +366,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         g.fillRect(WIDTH / 2, HEIGHT / 2, WIDTH / 2, HEIGHT / 2);
 
         g.setColor(Color.BLACK);
-        g.fillRoundRect(220, 220, 350, 350, 350, 350);
+        g.fillRoundRect(225, 220, 350, 350, 350, 350);
 
         g.setColor(Color.GRAY);
         g.setStroke(new BasicStroke(200));
