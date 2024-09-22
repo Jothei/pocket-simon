@@ -1,5 +1,7 @@
 package ch.joth.games.pocketsimon.game;
 
+import ch.joth.games.pocketsimon.game.code.eColorMode;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -23,8 +25,9 @@ public class HighscoreEntryDialog extends JDialog {
      *
      * @param parent the parent JFrame
      * @param points preview of the points to be displayed in the score and added to the highscore entry
+     * @param mode   the color mode of the game
      */
-    public HighscoreEntryDialog(JFrame parent, int points) {
+    public HighscoreEntryDialog(JFrame parent, int points, eColorMode mode) {
         super(parent, "Add Highscore Entry", true);
 
         JPanel panel = new JPanel(new GridBagLayout());
@@ -61,7 +64,7 @@ public class HighscoreEntryDialog extends JDialog {
 
         JButton btnAdd = new JButton("Add");
         btnAdd.addActionListener(e -> {
-            new HighscoreModel().addEntry(new HighscoreEntry(getNameField(), getScore()));
+            new HighscoreModel().addEntry(new HighscoreEntry(getNameField(), getScore(), mode));
             dispose();
         });
         JButton btnCancel = new JButton("Cancel");

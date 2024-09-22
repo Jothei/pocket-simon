@@ -1,5 +1,7 @@
 package ch.joth.games.pocketsimon.game;
 
+import ch.joth.games.pocketsimon.game.code.eColorMode;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -20,6 +22,10 @@ public class HighscoreEntry {
      * Date when the score was achieved.
      */
     private String date;
+    /**
+     * Game mode of the highscore entry.
+     */
+    private eColorMode gameMode;
 
     /**
      * Default constructor for HighscoreEntry.
@@ -33,12 +39,15 @@ public class HighscoreEntry {
      * Constructs a new HighscoreEntry with the specified name and score.
      * The date is set to the current date and time.
      *
-     * @param name  the name of the player
-     * @param score the score achieved by the player
+     * @param name     the name of the player
+     * @param score    the score achieved by the player
+     * @param gameMode the game mode of the highscore entry
      */
-    public HighscoreEntry(String name, int score) {
+    public HighscoreEntry(String name, int score, eColorMode gameMode) {
         this.name = name;
+        this.setName(name);
         this.score = score;
+        this.gameMode = gameMode;
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
@@ -53,6 +62,10 @@ public class HighscoreEntry {
      */
     public String getName() {
         return name;
+    }
+
+    public eColorMode getGameMode() {
+        return gameMode;
     }
 
     /**

@@ -1,5 +1,7 @@
 package ch.joth.games.pocketsimon.game;
 
+import ch.joth.games.pocketsimon.game.code.eColorMode;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -35,8 +37,9 @@ public class HighscoreView {
         tableModel.addColumn("Name");
         tableModel.addColumn("Score");
         tableModel.addColumn("Date");
+        tableModel.addColumn("Gamemode");
         for (HighscoreEntry entry : this.getRows()) {
-            tableModel.addRow(new Object[]{entry.getName(), entry.getScore(), entry.getDate()});
+            tableModel.addRow(new Object[]{entry.getName(), entry.getScore(), entry.getDate(), getGamemodeTranslation(entry.getGameMode())});
         }
 
         TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
@@ -47,7 +50,7 @@ public class HighscoreView {
         JScrollPane scrollPane = new JScrollPane(table);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-         
+
     }
 
     /**
@@ -67,5 +70,23 @@ public class HighscoreView {
     public List<HighscoreEntry> getRows() {
         HighscoreModel model = new HighscoreModel();
         return model.getEntries();
+    }
+
+    private String getGamemodeTranslation(eColorMode mode) {
+        if (mode == null) {
+            return "Unknown";
+        }
+        switch (mode) {
+            case COLOR_ON:
+                return "Pocket Simon";
+            case COLOR_OFF:
+                return "Single Color";
+            case COLOR_AUDIO_ONLY:
+                return "Audio Only";
+            case COLOR_MULTI_BUTTONS:
+                return "Multi Buttons";
+            default:
+                return "Unknown";
+        }
     }
 }

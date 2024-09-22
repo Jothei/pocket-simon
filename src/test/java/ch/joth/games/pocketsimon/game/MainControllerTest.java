@@ -26,7 +26,7 @@ class MainControllerTest {
     }
 
     @Test
-    void testConstructorWithParameters() throws NoSuchFieldException, IllegalAccessException {
+    void testConstructorWithParametersTest() throws NoSuchFieldException, IllegalAccessException {
 
         MainController mainController = new MainController(modelMock, viewMock);
 
@@ -42,7 +42,7 @@ class MainControllerTest {
     }
 
     @Test
-    void actionPerformed_setsServiceFactoryAndMenuAction() {
+    void actionPerformedSetsServiceFactoryAndMenuActionTest() {
         when(eventMock.getActionCommand()).thenReturn("command");
 
         controller.new MenuButtonListener().actionPerformed(eventMock);
@@ -52,7 +52,7 @@ class MainControllerTest {
     }
 
     @Test
-    void actionPerformed_withNullCommand_doesNotSetMenuAction() {
+    void actionPerformedWithNullCommand_doesNotSetMenuActionTest() {
         when(eventMock.getActionCommand()).thenReturn(null);
 
         controller.new MenuButtonListener().actionPerformed(eventMock);

@@ -52,6 +52,7 @@ public interface IGameBehaviour {
      *
      * @param parent the parent JFrame
      * @param points the points to be inserted
+     * @param mode   the color mode of the game
      */
-    void initHighscoreInsertDialog(JFrame parent, int points);
+    void initHighscoreInsertDialog(JFrame parent, int points, eColorMode mode);
 }

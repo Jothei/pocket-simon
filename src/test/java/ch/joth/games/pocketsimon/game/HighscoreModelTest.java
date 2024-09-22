@@ -1,5 +1,6 @@
 package ch.joth.games.pocketsimon.game;
 
+import ch.joth.games.pocketsimon.game.code.eColorMode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +49,7 @@ class HighscoreModelTest {
     @Test
     void addEntryTest() {
 
-        highscoreModel.addEntry(new HighscoreEntry("TestUser_JUNIT", 100));
+        highscoreModel.addEntry(new HighscoreEntry("TestUser_JUNIT", 100, eColorMode.COLOR_ON));
         assertNotNull(highscoreModel.getEntries());
     }
 

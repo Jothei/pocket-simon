@@ -72,7 +72,7 @@ public class GameSettingsModel {
             colorMode = eColorMode.COLOR_OFF;
         } else if (Objects.equals(selectedColorMode, "Audio only Mode")) {
             colorMode = eColorMode.COLOR_AUDIO_ONLY;
-        } else if (Objects.equals(selectedColorMode, "Multi Button Mode")) {
+        } else if (Objects.equals(selectedColorMode, "Multi Button Mode (Alpha)")) {
             colorMode = eColorMode.COLOR_MULTI_BUTTONS;
         }
         view.getSubmitButton().setEnabled(isSetupComplete());

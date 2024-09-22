@@ -1,5 +1,6 @@
 package ch.joth.games.pocketsimon.game;
 
+import ch.joth.games.pocketsimon.game.code.eColorMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,43 +12,43 @@ class HighscoreEntryTest {
 
     @BeforeEach
     void setUp() {
-        entry = new HighscoreEntry("Player1", 100);
+        entry = new HighscoreEntry("Player1", 100, eColorMode.COLOR_ON);
     }
 
     @Test
-    void constructor_setsNameAndScore() {
+    void constructorSetsNameAndScoreTest() {
         assertEquals("Player1", entry.getName());
         assertEquals(100, entry.getScore());
     }
 
     @Test
-    void constructor_setsCurrentDate() {
+    void constructorSetsCurrentDateTest() {
         assertNotNull(entry.getDate());
     }
 
     @Test
-    void setName_updatesName() {
+    void setNameUpdatesNameTest() {
         entry.setName("Player2");
         assertEquals("Player2", entry.getName());
     }
 
     @Test
-    void getName_returnsName() {
+    void getNameReturnsNameTest() {
         assertEquals("Player1", entry.getName());
     }
 
     @Test
-    void getScore_returnsScore() {
+    void getScoreReturnsScoreTest() {
         assertEquals(100, entry.getScore());
     }
 
     @Test
-    void getDate_returnsDate() {
+    void getDateReturnsDateTest() {
         assertNotNull(entry.getDate());
     }
 
     @Test
-    void defaultConstructor_initializesFields() {
+    void defaultConstructorInitializesFieldsTest() {
         HighscoreEntry defaultEntry = new HighscoreEntry();
         assertNull(defaultEntry.getName());
         assertEquals(0, defaultEntry.getScore());

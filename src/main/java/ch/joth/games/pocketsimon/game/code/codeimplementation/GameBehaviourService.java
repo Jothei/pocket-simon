@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static ch.joth.games.pocketsimon.game.code.codeimplementation.FormRendererService.HEIGHT;
 import static ch.joth.games.pocketsimon.game.code.codeimplementation.FormRendererService.WIDTH;
@@ -105,7 +106,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         renderer = new FormRendererService();
         timer = new Timer(20, this);
         service = new ServiceFactory();
-        gameBehaviour = this; //NOSONAR - Fix to prevent Buttons from being not displayed
+        gameBehaviour = this; //NOSONAR - Fix to prevent Buttons from not being  displayed
     }
 
     /**
@@ -121,9 +122,10 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      *
      * @param parent the parent JFrame
      * @param points the points to be displayed in the dialog
+     * @param mode   the color mode of the game
      */
-    public void initHighscoreInsertDialog(JFrame parent, int points) {
-        dialog = new HighscoreEntryDialog(parent, points);
+    public void initHighscoreInsertDialog(JFrame parent, int points, eColorMode mode) {
+        dialog = new HighscoreEntryDialog(parent, points, mode);
         showHighscoreDialog();
     }
 
@@ -178,40 +180,24 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
     }
 
-
     void startMultiButtonGame() {
         if (!GraphicsEnvironment.isHeadless()) {
 
             this.gameFrame = new JFrame(service.ConfigService().getValue(eConfigValues.GAME_TITLE));
-
-
-            this.setGameFrameSettings();
-            buttonPanel = new JPanel() {
-                @Override
-                protected void paintComponent(Graphics g) {
-                    super.paintComponent(g);
-                    arrangeButtonsInCircle();
-
-                }
-            };
-
+            setGameFrameSettings();
+            this.renderer.setLayout(null);
+            this.gameFrame.add(renderer);
+            buttonPanel = new JPanel();
+            arrangeButtonsInCircle();
+            buttonPanel.setVisible(true);
+            this.gameFrame.add(buttonPanel);
+            buttonPanel.add(renderer);
 
             for (int i = 1; i <= buttonCount; i++) {
                 addNewButton(i);
             }
-            JScrollPane scrollPane = new JScrollPane(buttonPanel);
-            scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-            scrollPane.setPreferredSize(new Dimension(gameFrame.getWidth(), (int) (gameFrame.getHeight() * 0.9)));
-            this.gameFrame.add(scrollPane, BorderLayout.NORTH);
-            renderer.setPreferredSize(new Dimension(gameFrame.getWidth(), 0));
-            renderer.setAlignmentY(Component.TOP_ALIGNMENT);
-            this.gameFrame.add(renderer);
-            buttonPanel.setLayout(null);
-            buttonPanel.setVisible(true);
-            buttonPanel.setEnabled(true);
-            this.gameFrame.setEnabled(true);
-            this.gameFrame.setVisible(true);
             initGameVariables();
+            this.gameFrame.repaint();
             timer.start();
 
         } else {
@@ -295,7 +281,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             addMultiButtonsPaint();
             g.drawString(indexPattern + delimiterSymbol + pattern.size(), 50, 50);
 
-            // Add Game Ending for Multi Button Mode. //NOSONAR
+            // TODO: Add Game Ending for Multi Button Mode. //NOSONAR
         }
     }
 
@@ -345,7 +331,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
      * Adds the buttons to the game GUI for Multi Button Mode.
      */
     private void addMultiButtonsPaint() {
-        Component[] components = buttonPanel.getComponents();
+        Component[] components = Arrays.stream(buttonPanel.getComponents()).filter(c -> c instanceof JButton).toArray(Component[]::new);
         for (Component component : components) {
             try {
                 this.setColor((JButton) component);
@@ -433,13 +419,16 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
 
     private void flashedIteration() {
         if (flashed != 0) {
+            if (pattern.size() <= indexPattern) {
+                indexPattern--;
+            }
             if (pattern.get(indexPattern) == flashed) { // Correct Button
                 indexPattern++;
             } else { // Wrong Button
                 playSound(eSoundFile.FAIL);
                 service.LoggingService().log("Game Over", WARN, this.getClass(), "flashed: " + flashed);
-                initHighscoreInsertDialog(this.gameFrame, pattern.size());
-                gameOver = true;
+                initHighscoreInsertDialog(this.gameFrame, pattern.size(), this.colorMode);
+                this.setGameOver(true);
             }
         }
     }
@@ -457,7 +446,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             } else if (gameOver) {
                 service.LoggingService().log("Restart Game after Game Over", INFO, this.getClass(), "flashed: " + flashed);
                 initGameVariables();
-                gameOver = false;
+                this.setGameOver(false);
             }
             flashedIteration();
         }
@@ -520,7 +509,7 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         } else if (this.colorMode == eColorMode.COLOR_AUDIO_ONLY) {
             g.setColor(color);
         } else {
-            if (flashed != null) {
+            if (flashed) {
                 g.setColor(Color.white);
             } else {
                 g.setColor(Color.lightGray);
@@ -539,10 +528,12 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
             throw new IllegalAccessException("This method is only allowed for Multi Button Mode");
         }
         if (this.flashed == text) {
-            button.setBackground(button.getBackground().brighter());
+            button.setBackground(Color.white);
+
         } else {
-            button.setBackground(button.getBackground());
+            button.setBackground(Color.red);
         }
+
     }
 
     /**
@@ -640,10 +631,8 @@ public class GameBehaviourService implements IGameBehaviour, ActionListener, Mou
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.gameFrame.setLayout(new BorderLayout());
         this.gameFrame.addMouseListener(this);
-        if (this.colorMode != eColorMode.COLOR_MULTI_BUTTONS) {
-            this.gameFrame.setEnabled(true);
-            this.gameFrame.setVisible(true);
-        }
+        this.gameFrame.setEnabled(true);
+        this.gameFrame.setVisible(true);
     }
 
     private int getJButtonTextinInt(JButton button) {

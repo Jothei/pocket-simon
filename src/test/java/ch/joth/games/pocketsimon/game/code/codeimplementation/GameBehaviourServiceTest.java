@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -37,9 +39,12 @@ class GameBehaviourServiceTest {
     Field ticksField;
     Field rendererField;
     Field darkField;
+    Field indexPatternField;
+    Field patternField;
+    Method regularMouseEventMethod;
 
     @BeforeEach
-    void setUp() throws NoSuchFieldException {
+    void setUp() throws NoSuchFieldException, NoSuchMethodException {
 
         gameBehaviourService = new GameBehaviourService();
         gameMock = spy(gameBehaviourService);
@@ -48,14 +53,13 @@ class GameBehaviourServiceTest {
 
         serviceMock = mock(service.getClass());
         when(serviceMock.ConfigService()).thenReturn(new ConfigService());
-
         when(serviceMock.LoggingService()).thenReturn(new LoggingService());
 
-        setupFields();
+        setupFieldsAndMocks();
 
     }
 
-    private void setupFields() throws NoSuchFieldException {
+    private void setupFieldsAndMocks() throws NoSuchFieldException, NoSuchMethodException {
         colorModeField = gameMock.getClass().getDeclaredField("colorMode");
         colorModeField.setAccessible(true);
 
@@ -82,10 +86,20 @@ class GameBehaviourServiceTest {
 
         darkField = gameBehaviourService.getClass().getDeclaredField("dark");
         darkField.setAccessible(true);
+
+        indexPatternField = gameBehaviourService.getClass().getDeclaredField("indexPattern");
+        indexPatternField.setAccessible(true);
+        regularMouseEventMethod = gameBehaviourService.getClass().getDeclaredMethod("regularMousePressEvent", MouseEvent.class);
+        regularMouseEventMethod.setAccessible(true);
+
+        patternField = gameBehaviourService.getClass().getDeclaredField("pattern");
+        patternField.setAccessible(true);
+
+
     }
 
     @Test
-    void startGameWithConstructor() throws NoSuchFieldException, IllegalAccessException {
+    void startGameWithConstructorTest() throws NoSuchFieldException, IllegalAccessException {
         Field soundMode = gameMock.getClass().getDeclaredField("soundMode");
         soundMode.setAccessible(true);
         Field colorMode = gameMock.getClass().getDeclaredField("colorMode");
@@ -99,7 +113,7 @@ class GameBehaviourServiceTest {
 
 
     @Test
-    void startGameWithConstructor2() throws NoSuchFieldException, IllegalAccessException {
+    void startGameWithConstructor2Test() throws NoSuchFieldException, IllegalAccessException {
         Field soundMode = gameMock.getClass().getDeclaredField("soundMode");
         soundMode.setAccessible(true);
         Field colorMode = gameMock.getClass().getDeclaredField("colorMode");
@@ -112,7 +126,7 @@ class GameBehaviourServiceTest {
 
     @ParameterizedTest
     @MethodSource("provideEnums")
-    void startGame(eColorMode color, eSoundMode sound) throws NoSuchFieldException, IllegalAccessException {
+    void startGameTest(eColorMode color, eSoundMode sound) throws NoSuchFieldException, IllegalAccessException {
         Field soundMode = gameMock.getClass().getDeclaredField("soundMode");
         soundMode.setAccessible(true);
         soundMode.set(gameMock, sound);
@@ -136,7 +150,7 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    void mousePressed() {
+    void mousePressedTest() {
         MouseEvent e = mock(MouseEvent.class);
         this.setPattern(false);
         gameBehaviourService.setGameOver(true);
@@ -154,7 +168,7 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    void mousePressedGreenButton() throws IllegalAccessException {
+    void mousePressedGreenButtonTest() throws IllegalAccessException {
         MouseEvent e = mock(MouseEvent.class);
         this.setPattern(false);
         gameBehaviourService.setGameOver(false);
@@ -171,7 +185,7 @@ class GameBehaviourServiceTest {
 
     @ParameterizedTest
     @EnumSource(eColorMode.class)
-    void paint(eColorMode value) throws NoSuchFieldException, IllegalAccessException {
+    void paintTest(eColorMode value) throws NoSuchFieldException, IllegalAccessException {
         Graphics2D g = mock(Graphics2D.class);
         Field colorMode = gameBehaviourService.getClass().getDeclaredField("colorMode");
         colorMode.setAccessible(true);
@@ -224,7 +238,7 @@ class GameBehaviourServiceTest {
 
     @ParameterizedTest
     @EnumSource(eColorMode.class)
-    void startGame_setsColorAndSoundModes(eColorMode colorMode) {
+    void startGameSetsColorAndSoundModesTest(eColorMode colorMode) {
         eSoundMode soundMode = eSoundMode.SOUND_ON;
         Graphics2D gMock = mock(Graphics2D.class);
         doNothing().when(gameMock).startGame();
@@ -238,7 +252,7 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    void startGame_callsCreateAndShowGUI_whenColorModeIsMultiButtons() {
+    void startGameCallsCreateAndShowGUIWhenColorModeIsMultiButtonsTest() {
         eSoundMode soundMode = eSoundMode.SOUND_ON;
         eColorMode colorMode = eColorMode.COLOR_MULTI_BUTTONS;
         doNothing().when(gameMock).startMultiButtonGame();
@@ -247,7 +261,7 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    void startGame_callsStartGame_whenColorModeIsNotMultiButtons() {
+    void startGameCallsStartGameWhenColorModeIsNotMultiButtonsTest() {
         eSoundMode soundMode = eSoundMode.SOUND_ON;
         eColorMode colorMode = eColorMode.COLOR_ON;
         doNothing().when(gameMock).startGame();
@@ -256,7 +270,7 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    void paint_callsRendererRepaint() throws IllegalAccessException, NoSuchFieldException {
+    void paintCallsRendererRepaintTest() throws IllegalAccessException, NoSuchFieldException {
         ActionEvent actionMock = mock(ActionEvent.class);
         FormRendererService rendererMock = mock(FormRendererService.class);
         rendererField = gameMock.getClass().getDeclaredField("renderer");
@@ -270,7 +284,7 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    void setColorMultiButtonThrows() throws IllegalAccessException {
+    void setColorMultiButtonThrowsTest() throws IllegalAccessException {
         JButton buttonMock = mock(JButton.class);
 
         this.colorModeField.set(gameMock, eColorMode.COLOR_ON);
@@ -279,7 +293,7 @@ class GameBehaviourServiceTest {
     }
 
     @Test
-    void setColorMultiButtonDoesentThrow() throws IllegalAccessException {
+    void setColorMultiButtonDoesentThrowTest() throws IllegalAccessException {
         JButton buttonMock = spy(JButton.class);
         buttonMock.setText("1");
 
@@ -289,14 +303,13 @@ class GameBehaviourServiceTest {
         assertDoesNotThrow(() -> gameMock.setColor(buttonMock));
     }
 
-
+    @SuppressWarnings("unchecked")
     @Test
-    void setupGameLogicTestSimonColorModeTest() throws IllegalAccessException, NoSuchFieldException {
+    void setupGameLogicTestSimonColorModeTest() throws IllegalAccessException {
 
         GameBehaviourService gameBehaviourServiceSpy = spy(gameBehaviourService);
         ActionEvent actionMock = mock(ActionEvent.class);
-        Field patternField = gameBehaviourServiceSpy.getClass().getDeclaredField("pattern");
-        patternField.setAccessible(true);
+
 
         gameBehaviourServiceSpy.startGame(eSoundMode.SOUND_OFF, eColorMode.COLOR_ON);
         darkField.set(gameBehaviourServiceSpy, 0);
@@ -309,5 +322,39 @@ class GameBehaviourServiceTest {
         assertEquals(1, patternRes.size());
         assertEquals(4, this.buttonCountField.get(gameBehaviourServiceSpy));
         assertFalse((boolean) this.createPatternField.get(gameBehaviourServiceSpy));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void GameLogicTestSimonColorModeTest() throws IllegalAccessException, InvocationTargetException {
+        GameBehaviourService gameBehaviourServiceSpy = spy(gameBehaviourService);
+        ActionEvent actionMock = mock(ActionEvent.class);
+        MouseEvent mouseEventMock = mock(MouseEvent.class);
+        ArrayList<Integer> patternStub = new ArrayList<>();
+
+        when(mouseEventMock.getX()).thenReturn(10);
+        when(mouseEventMock.getY()).thenReturn(10);
+        gameBehaviourServiceSpy.startGame(eSoundMode.SOUND_OFF, eColorMode.COLOR_ON);
+        darkField.set(gameBehaviourServiceSpy, 0);
+        gameBehaviourServiceSpy.actionPerformed(actionMock);
+        flashedField.set(gameBehaviourServiceSpy, 1);
+
+        pattern = (ArrayList<Integer>) patternField.get(gameBehaviourServiceSpy);
+        patternStub.add(1);
+        patternField.set(gameBehaviourServiceSpy, patternStub);
+        regularMouseEventMethod.invoke(gameBehaviourServiceSpy, mouseEventMock);
+        pattern = (ArrayList<Integer>) patternField.get(gameBehaviourServiceSpy);
+        assertEquals(1, pattern.size());
+
+        gameBehaviourServiceSpy.actionPerformed(actionMock);
+        pattern = (ArrayList<Integer>) patternField.get(gameBehaviourServiceSpy);
+        patternStub.add(1);
+        patternField.set(gameBehaviourServiceSpy, patternStub);
+        regularMouseEventMethod.invoke(gameBehaviourServiceSpy, mouseEventMock);
+
+        pattern = (ArrayList<Integer>) patternField.get(gameBehaviourServiceSpy);
+        assertEquals(2, pattern.size());
+
+
     }
 }

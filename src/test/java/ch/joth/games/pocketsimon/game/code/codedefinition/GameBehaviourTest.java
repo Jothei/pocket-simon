@@ -63,7 +63,7 @@ class GameBehaviourTest {
 
     @ParameterizedTest
     @CsvSource({"SOUND_ON, COLOR_ON", "SOUND_OFF, COLOR_OFF", "SOUND_ON, COLOR_OFF", "SOUND_OFF, COLOR_ON"})
-    void testStartGame(eSoundMode soundMode, eColorMode colorMode) {
+    void testStartGameTest(eSoundMode soundMode, eColorMode colorMode) {
         GameBehaviourService gameSpy = spy(gameBehaviour);
         doNothing().when(gameSpy).startGame();
 
@@ -76,7 +76,7 @@ class GameBehaviourTest {
     }
 
     @Test
-    void testInitGameVariables() throws NoSuchFieldException, IllegalAccessException {
+    void testInitGameVariablesTest() throws NoSuchFieldException, IllegalAccessException {
         gameBehaviour.initGameVariables();
         Field indexPatternField = gameBehaviour.getClass().getDeclaredField("indexPattern");
         indexPatternField.setAccessible(true);
@@ -88,7 +88,7 @@ class GameBehaviourTest {
 
 
     @Test
-    void actionPerformed_incrementsTicks() throws IllegalAccessException {
+    void actionPerformedIncrementsTicksTest() throws IllegalAccessException {
 
         ticksField.set(gameBehaviour, 0);
         gameBehaviour.actionPerformed(new ActionEvent(this, 0, null));
@@ -96,7 +96,7 @@ class GameBehaviourTest {
     }
 
     @Test
-    void actionPerformed_decrementsDarkAfter20Ticks() throws IllegalAccessException {
+    void actionPerformedDecrementsDarkAfter20TicksTest() throws IllegalAccessException {
         ticksField.set(gameBehaviour, 19);
 
         gameBehaviour.actionPerformed(new ActionEvent(this, 0, null));
@@ -104,7 +104,7 @@ class GameBehaviourTest {
     }
 
     @Test
-    void actionPerformed_createsPatternWhenDarkIsZero() {
+    void actionPerformedCreatesPatternWhenDarkIsZeroTest() {
         this.setPattern(true);
         this.setDark(0);
         pattern.clear();
@@ -114,7 +114,7 @@ class GameBehaviourTest {
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
-    void mousePressed_resetsGameWhenGameOver(Boolean gameOver) {
+    void mousePressedResetsGameWhenGameOverTest(Boolean gameOver) {
         gameBehaviour.setGameOver(gameOver);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
@@ -127,7 +127,7 @@ class GameBehaviourTest {
 
 
     @Test
-    void mousePressed_correctPatternDoesNotEndGame() {
+    void mousePressedCorrectPatternDoesNotEndGameTest() {
         pattern.add(1);
 
         setFlashed(1);
@@ -137,7 +137,7 @@ class GameBehaviourTest {
     }
 
     @Test
-    void mousePressed_incorrectPatternEndsGame() {
+    void mousePressedIncorrectPatternEndsGameTest() {
         pattern.add(1);
         setFlashed(2);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
@@ -147,7 +147,7 @@ class GameBehaviourTest {
 
 
     @Test
-    void actionPerformedShouldNotCreatePatternWhenDarkIsNotZero() {
+    void actionPerformedShouldNotCreatePatternWhenDarkIsNotZeroTest() {
         this.setPattern(true);
         this.setDark(1);
         pattern.clear();
@@ -156,7 +156,7 @@ class GameBehaviourTest {
     }
 
     @Test
-    void mousePressedShouldResetGameWhenGameOver() {
+    void mousePressedShouldResetGameWhenGameOverTest() {
 
         gameBehaviour.setGameOver(true);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
@@ -165,7 +165,7 @@ class GameBehaviourTest {
     }
 
     @Test
-    void mousePressedShouldNotResetGameWhenNotGameOver() {
+    void mousePressedShouldNotResetGameWhenNotGameOverTest() {
         gameBehaviour.setGameOver(false);
         gameBehaviour.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
@@ -173,12 +173,12 @@ class GameBehaviourTest {
     }
 
     @Test
-    void mousePressedShouldEndGameWhenPatternIsIncorrect() {
+    void mousePressedShouldEndGameWhenPatternIsIncorrectTest() {
         pattern.add(1);
         setFlashed(2);
         this.setPattern(false);
         GameBehaviourService gameSpy = spy(gameBehaviour);
-        doNothing().when(gameSpy).initHighscoreInsertDialog(any(), anyInt());
+        doNothing().when(gameSpy).initHighscoreInsertDialog(any(), anyInt(), any(eColorMode.class));
         gameSpy.mousePressed(new MouseEvent(new Component() {
         }, 0, 0, 0, 0, 0, 0, false));
         assertTrue(gameSpy.isGameOver());
