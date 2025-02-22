@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -6,7 +7,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-test-1-deploy
+  name: app-test-1-deployment
   namespace: app-test-1
 spec:
   replicas: 1
@@ -19,28 +20,23 @@ spec:
         app: app-test-1
     spec:
       containers:
-      - name: app-test-1
-        image: nginx:latest
+      - name: nginx
+        image: nginx:alpine
         ports:
-        - name: web
-          containerPort: 80
+          - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-test-1-svc
+  name: app-test-1-service
   namespace: app-test-1
-  labels:
-    app: app-test-1
 spec:
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 80
-      targetPort: 80
-      protocol: TCP
   selector:
     app: app-test-1
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -48,18 +44,75 @@ metadata:
   name: app-test-1-ingress
   namespace: app-test-1
   annotations:
-    # Ältere Variante, wird von vielen Traefik-Versionen akzeptiert:
     kubernetes.io/ingress.class: traefik
 spec:
-  ingressClassName: traefik  # Moderne Variante, ab K8s 1.19+
   rules:
     - host: nginx.local
       http:
         paths:
-          - path: /
+          - path: /app1
             pathType: Prefix
             backend:
               service:
-                name: app-test-1-svc
+                name: app-test-1-service
+                port:
+                  number: 80
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app-test-2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-test-2-deployment
+  namespace: app-test-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-test-2
+  template:
+    metadata:
+      labels:
+        app: app-test-2
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+          - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-test-2-service
+  namespace: app-test-2
+spec:
+  selector:
+    app: app-test-2
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-test-2-ingress
+  namespace: app-test-2
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: nginx.local
+      http:
+        paths:
+          - path: /app2
+            pathType: Prefix
+            backend:
+              service:
+                name: app-test-2-service
                 port:
                   number: 80
