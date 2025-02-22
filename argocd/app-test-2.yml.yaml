@@ -49,7 +49,7 @@ metadata:
   namespace: app-test-1
 spec:
   rules:
-  - host: "nginx.localdomain"
+  - host: "nginx.local"
     http:
       paths:
       - path: /
