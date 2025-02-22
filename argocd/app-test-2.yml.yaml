@@ -10,7 +10,7 @@ metadata:
   name: app-test-1-deployment
   namespace: app-test-1
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: app-test-1
@@ -50,7 +50,7 @@ spec:
     - host: nginx.local
       http:
         paths:
-          - path: /app1
+          - path: /
             pathType: Prefix
             backend:
               service:
@@ -69,7 +69,7 @@ metadata:
   name: app-test-2-deployment
   namespace: app-test-2
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: app-test-2
@@ -96,23 +96,3 @@ spec:
   ports:
     - port: 80
       targetPort: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: app-test-2-ingress
-  namespace: app-test-2
-  annotations:
-    kubernetes.io/ingress.class: traefik
-spec:
-  rules:
-    - host: nginx.local
-      http:
-        paths:
-          - path: /app2
-            pathType: Prefix
-            backend:
-              service:
-                name: app-test-2-service
-                port:
-                  number: 80
