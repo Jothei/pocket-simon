@@ -11,7 +11,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabels: 
+    matchLabels:
       app: app-test-1
   template:
     metadata:
@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: app-test-1
-        image: nginx
+        image: nginx:latest
         ports:
         - name: web
           containerPort: 80
@@ -35,21 +35,23 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - name:  http
-    port:  80
-    targetPort: 80
-    protocol: TCP
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
   selector:
     app: app-test-1
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-test-2-ingress
+  name: app-test-1-ingress
   namespace: app-test-1
   annotations:
-    kubernetes.io/ingress.class: traefik  # Für Traefik als Ingress-Controller
+    # Ältere Variante, wird von vielen Traefik-Versionen akzeptiert:
+    kubernetes.io/ingress.class: traefik
 spec:
+  ingressClassName: traefik  # Moderne Variante, ab K8s 1.19+
   rules:
     - host: nginx.local
       http:
