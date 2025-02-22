@@ -10,7 +10,7 @@ metadata:
   name: app-test-1-deployment
   namespace: app-test-1
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: app-test-1
@@ -31,6 +31,7 @@ metadata:
   name: app-test-1-service
   namespace: app-test-1
 spec:
+  replicas: 5
   selector:
     app: app-test-1
   type: ClusterIP
