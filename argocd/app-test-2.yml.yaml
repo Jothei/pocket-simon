@@ -31,7 +31,6 @@ metadata:
   name: app-test-1-service
   namespace: app-test-1
 spec:
-  replicas: 5
   selector:
     app: app-test-1
   type: ClusterIP
